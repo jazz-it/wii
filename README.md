@@ -14,4 +14,4 @@ example for using multtiple extensions: `wii.sh php theme module inc js`
 
 Extensions (mp3) and predefined parameters (--audio, --video etc.) can not be combined. Keywords have a higher priority than extension(s).
 
-Therefore, `wii.sh -a -v` or `wii.sh -a doc` will not work, but `wii.sh mp3 doc` will work as expected.
+Therefore, `wii.sh -a -v` or `wii.sh -a doc` will not work, but `wii.sh mp3 doc` or `wii.sh -a` will work as expected.
