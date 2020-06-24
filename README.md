@@ -5,7 +5,7 @@ This project is also a demonstration for people working on `du` project to sketc
 
 Usage: 
 
-`wii.sh [-h] [--image|-i] [--audio|-a] [--video|-v] [--document|-d] [--archive|-r] [--font|-f] [--programming|-p] [extension(s)]`
+`wii.sh [--help|-h] [--image|-i] [--audio|-a] [--video|-v] [--document|-d] [--archive|-r] [--font|-f] [--programming|-p] [extension(s)]`
 
 example for using a custom extension: `wii.sh mp3`
 example for using multtiple extensions: `wii.sh php theme module inc js`
