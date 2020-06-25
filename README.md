@@ -13,6 +13,6 @@ example for using a custom extension: `wii.sh mp3`
 
 example for using multtiple extensions: `wii.sh php theme module inc js`
 
-Extensions (mp3) and predefined parameters (`--audio`, `--video` etc.) may not be combined with either other predefined parameters or keywords. Only extensions alone could be added multiple times if needed.
+Extensions and predefined parameters (`--audio`, `--video` etc.) may not be combined with either: other predefined parameters or extensions. Only extensions alone may be added multiple times if needed.
 
-Therefore, `wii.sh -a -v` or `wii.sh -a doc` will not work, but i.e. `wii.sh mp3 wav m4a` or `wii.sh -a` should work as expected.
+Therefore, `wii.sh -a -v` or `wii.sh docx -a doc` will not work, but i.e. `wii.sh mp3 wav m4a` or `wii.sh -a` should work as expected.
