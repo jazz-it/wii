@@ -1,5 +1,5 @@
 #!/bin/bash
-# What's In It? by Jazz v1.0.11
+# What's In It? by Jazz v1.0.12
 # Prints a short summary of the content of any directory by listing extensions and the number of files for each type found
 
 BLACK='\e[0;30m'
@@ -20,7 +20,7 @@ YELLOW='\e[0;33m'
 WHITE='\e[1;37m'
 NC='\e[0m'              # No Color
 
-
+shopt -s extglob # enable extglob whilst running the script in non-interactive shell (enabled by default for interactive one)!
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source "$DIR/inc/spinner.sh" 2> /dev/null
 
@@ -28,10 +28,8 @@ source "$DIR/inc/spinner.sh" 2> /dev/null
 _wii_set_bundle() {
 if [ ! -z "${1}" ]
 then
-  # Todo: Find out why the '+( )' part doesn't work when the line below is executed as a bash script, but when it's sourced - it works!
-  # bundle_size="\( -type f -iname \"*.${1//+( )/\" -printf "'"%d %p %s\\n"'" \\) -o \\( -type f -iname \"*.}\" -printf '%d %p %s\\n' \\)" # getting total sizes of each file for a given query
-  bundle_size="\( -type f -iname \"*.${1// /\" -printf "'"%d %p %s\\n"'" \\) -o \\( -type f -iname \"*.}\" -printf '%d %p %s\\n' \\)" # getting total sizes of each file for a given query
-  bundle="\( -type f -iname \"*.${1// /\" \\) -o \\( -type f -iname \"*.}\" \\)" # currently needed for getting a subtree summary for each directory
+  bundle_size="\( -type f -iname \"*.${1//+( )/\" -printf "'"%d %p %s\\n"'" \\) -o \\( -type f -iname \"*.}\" -printf '%d %p %s\\n' \\)" # getting total sizes of each file for a given query
+  bundle="\( -type f -iname \"*.${1//+( )/\" \\) -o \\( -type f -iname \"*.}\" \\)" # currently needed for getting a subtree summary for each directory
 fi
 }
 
@@ -67,7 +65,7 @@ case $s in
 
   --help | -h)
     i=1 # Don't display a summary
-    echo "What's In It? wii v1.0.11 by Jazz"
+    echo "What's In It? wii v1.0.12 by Jazz"
     echo "Usage: wii.sh [-h] [--image|-i] [--audio|-a] [--video|-v] [--document|-d] [--archive|-r] [--font|-f] [--programming|-p] [extension(s)]"
     echo
     echo "example for using a custom extension: 'wii.sh mp3'"
@@ -139,7 +137,7 @@ esac
 
 if [ "$i" != 1 ] # don't proceed if we printed help, or if wii without parameters returned only 1 directory as a result
 then
-  if [ "$bundle" == 0 ] # are there any parameters?
+  if [ "$bundle" == 0 ] # there are no parameters?
   then
     echo "Summary: "
     echo "--------"
