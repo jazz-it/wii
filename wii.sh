@@ -36,7 +36,7 @@ local desc=""              # description of predefined extensions
 local help=0               # counter of matching directories that contain the queried file type(s)
 local start=$(date +%s)    # start measuring elapsed time
 
-ss=${s//[^a-zA-Z0-9\s\-]/}   # sanitize user's input
+ss=${s//[^a-zA-Z0-9\s\-]/} # sanitize user's input
 
 if [ "${ss}" != "${s}" ]
 then
@@ -142,7 +142,7 @@ then
         s="KMGTEPZY";
         while (x>=1000 && length(s)>1)
             {x/=1024; s=substr(s,2)}
-        return sprintf("%5.4g",x+0.5) dim lightred substr(s,1,1) "B"
+        return sprintf("%5.4g",x+0.5) nc lightred substr(s,1,1) "B"
     }
     {
       inum = $0
@@ -166,17 +166,21 @@ then
       n = 0
       PROCINFO["sorted_in"] = "@val_num_desc"
       for (dir in sum) {
+        m = 0
         printf "%s[%s%s] %s%s%s\n", lightred, red, human(sum[dir] * 512), lightcyan, gensub(/^\.\//, "", "g", dir), nc
         for (ext in cnt[dir]) {
           printf "%9g %s\n", cnt[dir][ext], ext
+          if (++m >= max) break
         }
         if (++n >= max) break
       }
       if (total > 0 && length(sum) > 1) {
+        n = 0
         print "———————————————"
         printf "%s[%s%s] %stotal%s\n", lightred, red, human(total * 512), lightred, nc
         for (ext in extensions) {
           printf "%9g %s\n", extensions[ext], ext
+          if (++n >= max) break
         }
       } else if (total > 0 && length(sum) == 1) {
       } else {
