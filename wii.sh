@@ -31,12 +31,12 @@ fi
 # Main function
 _wii_core() {
 bundle=0
-local s="${1:-0}"          # parameters
-local desc=""              # description of predefined extensions
-local help=0               # counter of matching directories that contain the queried file type(s)
-local start=$(date +%s)    # start measuring elapsed time
+local s="${1:-0}"            # parameters
+local desc=""                # description of predefined extensions
+local help=0                 # counter of matching directories that contain the queried file type(s)
+local start=$(date +%s)      # start measuring elapsed time
 
-ss=${s//[^[:alnum:] _\-~]/} # sanitize user's input
+ss=${s//[^[:alnum:] _\-~]/}  # sanitize user's input
 
 if [ "${ss}" != "${s}" ]
 then
@@ -56,7 +56,9 @@ case $s in
     help=1 # Don't display a summary
     echo "What's In It? wii v2.0.1 by Jazz"
     echo
-    echo "Usage: wii.sh [-h] [--image|-i] [--audio|-a] [--video|-v] [--document|-d] [--archive|-r] [--font|-f] [--programming|-p] [extension(s)]"
+    echo "Usage:"
+    echo "======"
+    echo "wii.sh [-h] [--image|-i] [--audio|-a] [--video|-v] [--document|-d] [--ebook|-e] [--archive|-r] [--font|-f] [--programming|-p] [extension(s)]"
     echo
     echo "Examples:"
     echo "========="
@@ -64,7 +66,7 @@ case $s in
     echo "Predefined extensions: wii.sh -a"
     echo
     echo "Custom extensions (mp3, jpg, etc.) and predefined extensions (--audio, --video etc.) can not be combined."
-    echo "Therefore, 'wii.sh -a -v' or 'wii.sh -a doc' are invalid options and as per 'wii.sh -a jpg gif' -> 'jpg gif' would be ignored. Only alphanumeric, space, underscore, dash and tilda are accepted as valid custom extensions."
+    echo "Therefore, 'wii.sh -a -v' or 'wii.sh -a doc' are invalid options and as per 'wii.sh -a jpg gif' -> 'jpg gif' would be ignored. Only alphanumeric, space, underscore, dash and tilde are accepted as valid custom extensions."
     ;;
 
   --image | -i)
