@@ -36,6 +36,14 @@ local desc=""              # description of predefined extensions
 local help=0               # counter of matching directories that contain the queried file type(s)
 local start=$(date +%s)    # start measuring elapsed time
 
+ss=${s//[^a-zA-Z0-9\s]/}   # sanitize user's input
+
+if [ "${ss}" != "${s}" ]
+then
+  echo "Special characters are not allowed!"
+  return 0
+fi
+
 case $s in
 
   0)
