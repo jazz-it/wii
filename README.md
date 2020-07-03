@@ -44,12 +44,12 @@ Custom extensions (`mp3`, `jpg`, etc.) and predefined extensions (`--audio`, `--
 
  1. **Clone with GIT**
 ```
-$ mkdir $HOME/utils
-$ cd $HOME/utils
+$ mkdir "$HOME"/utils
+$ cd "$HOME"/utils
 $ git clone https://github.com/madjoe/wii.git
-$ chmod 755 $HOME/utils/wii/wii.sh $HOME/utils/wii/inc/spinner.sh
-$ touch $HOME/.profile
-$ echo "[ -d \$HOME/utils/wii ] && PATH=\"\$HOME/utils/wii:\$PATH\"" >> $HOME/.profile 
+$ chmod 755 "$HOME"/utils/wii/wii.sh "$HOME"/utils/wii/inc/spinner.sh
+$ touch "$HOME"/.profile
+$ echo "[ -d \$HOME/utils/wii ] && PATH=\"\$HOME/utils/wii:\$PATH\"" >> "$HOME"/.profile 
 ```
 > Log out and log in again.
 
@@ -57,15 +57,15 @@ $ echo "[ -d \$HOME/utils/wii ] && PATH=\"\$HOME/utils/wii:\$PATH\"" >> $HOME/.p
 
  2. **Download ZIP**
 ```
-$ mkdir $HOME/utils
-$ cd $HOME/utils
+$ mkdir "$HOME"/utils
+$ cd "$HOME"/utils
 $ wget https://github.com/madjoe/wii/archive/master.zip -O wii.zip
 $ unzip wii.zip
 $ mv -i wii-master wii
 $ rm wii.zip
-$ chmod 755 $HOME/utils/wii/wii.sh $HOME/utils/wii/inc/spinner.sh
-$ touch $HOME/.profile
-$ echo "[ -d \$HOME/utils/wii ] && PATH=\"\$HOME/utils/wii:\$PATH\"" >> $HOME/.profile 
+$ chmod 755 "$HOME"/utils/wii/wii.sh "$HOME"/utils/wii/inc/spinner.sh
+$ touch "$HOME"/.profile
+$ echo "[ -d \$HOME/utils/wii ] && PATH=\"\$HOME/utils/wii:\$PATH\"" >> "$HOME"/.profile 
 ```
 > Log out and log in again.
 
