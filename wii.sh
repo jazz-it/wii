@@ -1,35 +1,29 @@
 #!/bin/bash
-# What's In It? by Jazz v1.0.12
+# What's In It? by Jazz v2.0.1
 # Prints a short summary of the content of any directory by listing extensions and the number of files for each type found
 
-BLACK='\e[0;30m'
-BLUE='\e[0;34m'
-GREEN='\e[0;32m'
-CYAN='\e[0;36m'
-RED='\e[0;31m'
-PURPLE='\e[0;35m'
-BROWN='\e[0;33m'
-LIGHTGRAY='\e[0;37m'
-DARKGRAY='\e[1;30m'
-LIGHTBLUE='\e[1;34m'
-LIGHTGREEN='\e[1;32m'
-LIGHTCYAN='\e[1;36m'
-LIGHTRED='\e[1;31m'
-LIGHTPURPLE='\e[1;35m'
-YELLOW='\e[0;33m'
-WHITE='\e[1;37m'
-NC='\e[0m'              # No Color
-
-shopt -s extglob # enable extglob whilst running the script in non-interactive shell (enabled by default for interactive one)!
+me="$(basename "$(test -L "$0" && readlink "$0" || echo "$0")")"
+color=False
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source "$DIR/inc/spinner.sh" 2> /dev/null
+shopt -s extglob # enable extglob whilst running the script in non-interactive shell (enabled by default for interactive one)!
+
+# check if stdout is a terminal...
+if test -t 1; then
+
+    # see if it supports colors...
+    ncolors=$(tput colors)
+
+    if test -n "$ncolors" && test $ncolors -ge 8; then
+        color=True
+    fi
+fi
 
 # helper function for _wii_core(): constructing crucial parts of find command
 _wii_set_bundle() {
 if [ ! -z "${1}" ]
 then
-  bundle_size="\( -type f -iname \"*.${1//+( )/\" -printf "'"%d %p %s\\n"'" \\) -o \\( -type f -iname \"*.}\" -printf '%d %p %s\\n' \\)" # getting total sizes of each file for a given query
-  bundle="\( -type f -iname \"*.${1//+( )/\" \\) -o \\( -type f -iname \"*.}\" \\)" # currently needed for getting a subtree summary for each directory
+  bundle="\\( -type f -iname \"*.${1//+( )/\" -printf "'"%D:%i\\0%b\\0%h\\0%f\\0"'" \\) -o \\( -type f -iname \"*.}\" -printf '%D:%i\0%b\0%h\0%f\0' \\)" # extglob "+( )"
 fi
 }
 
@@ -37,41 +31,27 @@ fi
 # Main function
 _wii_core() {
 bundle=0
-local s="${1:-0}"       # parameters
-local hsize=""
-local desc=""
-local i=0               # counter of matching directories that contain the queried file type(s)
-local start=$(date +%s)
+local s="${1:-0}"          # parameters
+local desc=""              # description of predefined extensions
+local help=0               # counter of matching directories that contain the queried file type(s)
+local start=$(date +%s)    # start measuring elapsed time
 
 case $s in
 
   0)
-    LIST=$(du --separate-dirs -hc  . | sort -hr | head -50)
-    {
-      read -r line
-      [ $(echo $line | awk '{print $2}') = "total" ] && echo $line | sed 's/ /B /'  # skip parsing the first line from du
-      while IFS= read -r line; do
-        i=$((i+1))
-        hsize=${line%%[[:space:]\t]*} # extracts total size of a subfolder
-        relative_path=${line#*[[:space:]]} # extracts subfolder's relative path
-        relative_path_edit=${relative_path#\.\/} # hide leading "./"
-        num="$((5-${#hsize}))" # hsize + suffix "B" = 6
-        space="$(printf "%-${num}s" " ")"
-        printf "${RED}${hsize}B${NC}${space}${LIGHTCYAN}${relative_path_edit}${NC}\n"
-        find "$relative_path" -maxdepth 1 -type f -name "*.*" | grep -o "[^.]\+$" | sort | uniq -c | sort -k1 -nr
-      done
-    } <<< "$LIST"
+    desc=""
+    bundle="\\( -type f -iname \"*.*\" -printf '%D:%i\0%b\0%h\0%f\0' \\)"
     ;;
 
   --help | -h)
-    i=1 # Don't display a summary
-    echo "What's In It? wii v1.0.12 by Jazz"
+    help=1 # Don't display a summary
+    echo "What's In It? wii v2.0.1 by Jazz"
     echo "Usage: wii.sh [-h] [--image|-i] [--audio|-a] [--video|-v] [--document|-d] [--archive|-r] [--font|-f] [--programming|-p] [extension(s)]"
     echo
-    echo "example for using a custom extension: 'wii.sh mp3'"
-    echo "example for using multtiple extensions: 'wii.sh php theme module inc js'"
-    echo "Extensions (mp3) and predefined parameters (--audio, --video etc.) can not be combined. Keywords have a higher priority than extension(s)."
-    echo "Therefore, 'wii.sh -a -v' or 'wii.sh -a doc' will not work, but 'wii.sh mp3 doc' will work as expected."
+    echo "example for using a custom extension: 'wii.sh php theme module inc js'"
+    echo "example for using predefined extensions: 'wii.sh -a'"
+    echo "Custom extensions (mp3, jpg, etc.) and predefined extensions (--audio, --video etc.) can not be combined. Custom extensions could be multiplied."
+    echo "Therefore, 'wii.sh -a -v' or 'wii.sh -a doc' are invalid options and as per 'wii.sh -a jpg gif' -> 'jpg gif' will be ignored."
     ;;
 
   --image | -i)
@@ -117,133 +97,86 @@ case $s in
     ;;
 
   *)
-    prefix="\( -type f -iname \"*."
-    suffix="\" \\)"
-    suffix_size="\" -printf '%d %p %s\\n' \\)"
-    bundle=""
-    bundle_size=""
-    local param=0
-    for var in "$@"
-      do
-        param=$((param+1))
-        [ "$param" -lt $# ] && bundle="${bundle}${var}\" \\) -o \\( -type f -iname \"*." && bundle_size="${bundle_size}${var}\" -printf '%d %p %s\\n' \\) -o \\( -type f -iname \"*." && bundle_size_current="${bundle_size}${var}\" -printf '%d %p %s\\n' \\) -o \\( -type f -iname \"*."
-        [ "$param" == $# ] && [ "$param" -gt 1 ] && bundle="${bundle}${var}" && bundle_size="${bundle_size}${var}" && bundle_size_current="${bundle_size_current}${var}"
-        [ "$#" == 1 ] && bundle="${var}" && bundle_size="${var}" && bundle_size_current="${var}"
-      done
-    bundle="${prefix}${bundle}${suffix}"
-    bundle_size="${prefix}${bundle_size}${suffix_size}"
+    args=$@
+    desc=""
+    bundle="${args[*]}"
+    if [ "$(grep -c "\w*\-\w*" <<< "${bundle}")" == 0 ]  # check if user is mixing predefined extensions with custom ones
+    then
+      _wii_set_bundle "${bundle}"
+    else
+      printf "%s: invalid option -- '%s'\n" "${me}" "${bundle}"
+      printf "Try '%s --help' for more information.\n" "${me}"
+      return 0
+    fi
     ;;
 esac
 
-if [ "$i" != 1 ] # don't proceed if we printed help, or if wii without parameters returned only 1 directory as a result
+if [ "$help" != 1 ] # don't proceed if we printed help
 then
-  if [ "$bundle" == 0 ] # there are no parameters?
-  then
-    echo "Summary: "
-    echo "--------"
-    find . -type f -iname "*.*" | grep -o "[^.]\+$" | sort | uniq -c | sort -k1 -nr
-  else
-    i=0
-    hsize=0 # file size of current file
-    hsize_prev=0 # hsize sum from the previous loop cycle
-    all_hsize=0 # hsize of all matches
-    printed=0 # tracking status of displaying notifications
-    relative_path="" # basename of current file
-    relative_path_prev="" # relative path from the previous loop cycle
-    relative_path_stack="" # summary of sizes of all folders matching our query
-    all_results_stack="" # stack that includes all files found
-    file="files" # singular vs plural in notifications
-    directory="directories" # singular vs plural in notifications
-    LIST=$(echo -e "find . ${bundle_size} | sort -k1 -n" | bash) # main list of all file sizes and paths
-    LIST=$(echo -e "${LIST}" | cut -f1 -d" " --complement) # delete the depth indicator (%d) as the first column
-    LIST=$(echo -e "${LIST}" | awk '{$0=$NF FS$0;$NF=""}1') # move size column from the last position to the front
-    if [ -n "$(echo "$LIST" | head -n 1)" ]; # checking if the previous find command has returned any result
-    then
-      total_num_lines=$(echo "${LIST}" | wc -l)
-      [ "${total_num_lines}" -gt 800 ] && [ "${printed}" -lt 1 ] && printed=1 && echo -e "[${YELLOW}NOTE${NC}] This process may take awhile, so please be patient."
-      {
-        while IFS= read -r line; do
-          i=$((i+1))
-          hsize=${line%%[[:space:]\t]*} # read current file size
-          relative_path=$(dirname "${line#*[[:space:]]}") # extracts subfolder's relative path
-          filename="${line##*/}"
-          extension="${filename##*.}"
-          [ "$filename" == "$extension" ] && extension=""
-          [ ! -z "${relative_path}" ] && [ ! -z "${extension}" ] && all_results_stack="${all_results_stack}${hsize} ${relative_path} ${extension}\n" # create stack of directory names
-          if [ "${i}" == 1 ];
-          then
-            hsize_prev="${hsize}"
-            relative_path_prev="${relative_path}"
-          else
-            if [ "${relative_path_prev}" == "${relative_path}" ];
-            then
-              hsize_prev=$((hsize_prev+hsize))
-            else
-              relative_path_stack="${relative_path_stack}${hsize_prev} ${relative_path_prev}\n"
-              relative_path_prev="${relative_path}"
-              hsize_prev="${hsize}"
-            fi
-          fi
-        done
-      } <<< "$LIST"
-
-      if [ "${i}" -gt 0 ]
-      then
-        relative_path_stack="${relative_path_stack}${hsize_prev} ${relative_path_prev}\n" # add last element to the stack
-      fi
-
-      all_results_stack=$(echo "${all_results_stack//\\n/$'\n'}" | sed '/^$/d')
-      summary=$(echo -e "${all_results_stack}" | cut -f1 -d" " --complement) # delete the hsize column at the front
-      num_lines=$(echo -e "${relative_path_stack}" | wc -l)
-      all_hsize=$(echo -e "${all_results_stack}" | awk 'END { print s } { s += $1 }')
-
-
-      relative_path_stack=$(echo "${relative_path_stack//\\n/$'\n'}" | sort | uniq | sort -k1 -nr | sed '/^$/d' | head -50)
-      # display notifications
-      [ "${i}" == 1 ] && file="file" # signgular vs plural in notifications
-      [ "${num_lines}" == 1 ] && directory="directory"
-      [ "${num_lines}" -gt 50 ] && [ "${printed}" -lt 2 ] && printed=2 && echo -e "[${YELLOW}NOTE${NC}] Results will be truncated to display only 50 largest directories!" && echo -en "[${YELLOW}NOTE${NC}] " && printf "%s %s found in %s %s\n\n" "${i}" "${file}" "${num_lines}" "${directory}"
-      hsize_hr=$(echo ${all_hsize} | numfmt --to=iec --suffix=B)
-    else
-      hsize_hr="0B"
-    fi
-
-    printf "%s total\n" "${hsize_hr}"
-
-    if [ "$i" -gt 0 ] # do we have any results?
-    then
-      i=0
-      {
-        while IFS= read -r line; do
-          i=$((i+1))
-          hsize=${line%%[[:space:]\t]*} # extracts total size of a subfolder
-          hsize_hr=$(echo ${hsize} | numfmt --to=iec --suffix=B)
-          relative_path=${line#*[[:space:]]} # extracts subfolder's relative path
-          relative_path_edit=${relative_path#\.\/} # hide leading "./"
-          num="$((6-${#hsize_hr}))"
-          space="$(printf "%-${num}s" " ")"
-          printf "${RED}${hsize_hr}${NC}${space}${LIGHTCYAN}${relative_path_edit}${NC}\n"
-
-          # Todo: the following line should be re-created to avoid repetitive execution of find
-          printf "find %q -maxdepth 1 %s | grep -o \"[^.]\+$\" | sort | uniq -c | sort -k1 -nr" "${relative_path}" "${bundle}" | bash # subtree summary
-        done
-      } <<< "${relative_path_stack}"
-
-      if [ "$i" != 1 ] # don't display the summary if only one directory found
-      then
-        echo "Summary:"
-        echo "--------"
-        echo -e "${summary}" | awk '{print $NF}' | sort | uniq -c | sort -k1 -nr
-      fi
-
-      else
-      echo -e "No${desc} files found."
-    fi
-  fi
+  LC_ALL=C eval "find . ${bundle}" | gawk -v desc="${desc}" -v color="${color}" -v 'RS=\0' -v OFS='\t' -v max=50 '
+    BEGIN {
+      if (! color) {
+        red=""
+        lightred=""
+        lightcyan=""
+        nc=""
+      } else {
+        red="\033[1;31m"
+        lightred="\033[2;91m"
+        lightcyan="\033[0;96m"
+        nc="\033[0m"
+      }
+    }
+    function human(x) {
+        if (x<1000) {return x} else {x/=1024}
+        s="KMGTEPZY";
+        while (x>=1000 && length(s)>1)
+            {x/=1024; s=substr(s,2)}
+        return sprintf("%5.4g",x+0.5) dim lightred substr(s,1,1) "B"
+    }
+    {
+      inum = $0
+      getline du
+      getline dir
+      getline file
+      pos=match(file, "\\.[^\\/\\\\:\\.]+$")
+      if(pos != 0) {
+        ext=substr(file,pos+1)
+      }
+    }
+    ! seen[inum]++ {
+      gsub(/\\/, "&&", dir)
+      gsub(/\n/, "\\n", dir)
+      total += du
+      sum[dir] += du
+      cnt[dir][ext]++
+      extensions[ext]++
+    }
+    END {
+      n = 0
+      PROCINFO["sorted_in"] = "@val_num_desc"
+      for (dir in sum) {
+        printf "%s[%s%s] %s%s%s\n", lightred, red, human(sum[dir] * 512), lightcyan, gensub(/^\.\//, "", "g", dir), nc
+        for (ext in cnt[dir]) {
+          printf "%9g %s\n", cnt[dir][ext], ext
+        }
+        if (++n >= max) break
+      }
+      if (total > 0 && length(sum) > 1) {
+        print "———————————————"
+        printf "%s[%s%s] %stotal%s\n", lightred, red, human(total * 512), lightred, nc
+        for (ext in extensions) {
+          printf "%9g %s\n", extensions[ext], ext
+        }
+      } else if (total > 0 && length(sum) == 1) {
+      } else {
+        printf "%sNo%s files found.%s\n", red, desc, nc
+      }
+    }'
 fi
 end=$(date +%s)
 runtime=$((end-start))
-[ "${runtime}" -gt 9 ] && echo && printf 'Elapsed time: %dh:%dm:%ds\n' $(($runtime/3600)) $(($runtime%3600/60)) $(($runtime%60))
+[ "${runtime}" -gt 9 ] && printf "\nElapsed time: %dh:%dm:%ds\n" $(($runtime/3600)) $(($runtime%3600/60)) $(($runtime%60))
 }
 
 
