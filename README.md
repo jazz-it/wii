@@ -47,6 +47,7 @@ Custom extensions (`mp3`, `jpg`, etc.) and predefined extensions (`--audio`, `--
 $ mkdir ~/utils
 $ cd ~/utils
 $ git clone https://github.com/madjoe/wii.git
+$ chmod 755 ./wii/wii.sh ./wii/inc/spinner.sh
 $ touch ~/.profile
 $ echo "[ -d ~/utils/wii ] && PATH=\"~/utils/wii:\$PATH\"" >> ~/.profile 
 ```
@@ -62,6 +63,7 @@ $ wget https://github.com/madjoe/wii/archive/master.zip -O wii.zip
 $ unzip wii.zip
 $ mv -i wii-master wii
 $ rm wii.zip
+$ chmod 755 ./wii/wii.sh ./wii/inc/spinner.sh
 $ touch ~/.profile
 $ echo "[ -d ~/utils/wii ] && PATH=\"~/utils/wii:\$PATH\"" >> ~/.profile 
 ```
