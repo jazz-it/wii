@@ -1,18 +1,18 @@
 # wii
 What's In It? by Jazz
 
-Prints a short summary of any given content types within tree structure by listing number of files that match your search for each directory. The script will sort results by size of requested data in reverse order.
+Prints a short summary of specific content types within the whole tree structure by listing corresponding disk usage for each directory. The script will sort results by size of requested data in reverse order. If there are many directories found, the script will limit the output to top 50 largest directories.
 
-This project is also a demonstration for people working on `du` project to sketch a need for `--filter` parameter, where a user would be able to check the volume of certain file types within his directory tree.
+This project may be used as a demonstration for people working on `du` project as a usecase for a new `--include` parameter. Users would be able to measure disk usage of specific file types per each directory (recursively).
 
 Usage: 
 
 `wii.sh [--help|-h] [--image|-i] [--audio|-a] [--video|-v] [--document|-d] [--archive|-r] [--font|-f] [--programming|-p] [extension(s)]`
 
-example for using a custom extension: `wii.sh mp3`
+example for using a custom extension: `wii.sh php theme module inc js`
 
-example for using multtiple extensions: `wii.sh php theme module inc js`
+example for using predefined extensions: `wii.sh -a`
 
-Extensions and predefined parameters (`--audio`, `--video` etc.) may not be combined with either: other predefined parameters or extensions. Only extensions alone may be added multiple times if needed.
+Custom extensions (`mp3`, `jpg`, etc.) and predefined extensions (`--audio`, `--video` etc.) can not be combined. Only custom extensions may be used multiple times if needed.
 
-Therefore, `wii.sh -a -v` or `wii.sh docx -a doc` will not work, but i.e. `wii.sh mp3 wav m4a` or `wii.sh -a` should work as expected.
+Therefore, `wii.sh -a -v` or `wii.sh rtf -d` are invalid options and as per `wii.sh -d jpg gif` -> `jpg gif` would be ignored.
