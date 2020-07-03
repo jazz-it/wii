@@ -131,7 +131,7 @@ then
         lightcyan=""
         nc=""
       } else {
-        red="\033[1;31m"
+        red="\033[0;31m"
         lightred="\033[2;91m"
         lightcyan="\033[0;96m"
         nc="\033[0m"
