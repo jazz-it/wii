@@ -49,7 +49,7 @@ $ cd "$HOME"/utils
 $ git clone https://github.com/madjoe/wii.git
 $ chmod 755 "$HOME"/utils/wii/wii.sh "$HOME"/utils/wii/inc/spinner.sh
 $ touch "$HOME"/.profile
-$ echo "[ -d \$HOME/utils/wii ] && PATH=\"\$HOME/utils/wii:\$PATH\"" >> "$HOME"/.profile 
+$ echo "[ -d \"\$HOME\"/utils/wii ] && PATH=\"\$HOME/utils/wii:\$PATH\"" >> "$HOME"/.profile 
 ```
 > Log out and log in again.
 
@@ -65,7 +65,7 @@ $ mv -i wii-master wii
 $ rm wii.zip
 $ chmod 755 "$HOME"/utils/wii/wii.sh "$HOME"/utils/wii/inc/spinner.sh
 $ touch "$HOME"/.profile
-$ echo "[ -d \$HOME/utils/wii ] && PATH=\"\$HOME/utils/wii:\$PATH\"" >> "$HOME"/.profile 
+$ echo "[ -d \"\$HOME\"/utils/wii ] && PATH=\"\$HOME/utils/wii:\$PATH\"" >> "$HOME"/.profile 
 ```
 > Log out and log in again.
 
