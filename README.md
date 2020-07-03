@@ -11,10 +11,13 @@ Usage:
 
 
 Examples:
+
 ——————————
+
 Custom extension: `wii.sh php theme module inc js`
 
 Predefined extensions: `wii.sh -a`
+
 
 
 Custom extensions (`mp3`, `jpg`, etc.) and predefined extensions (`--audio`, `--video` etc.) can not be combined. Only custom extensions may be used multiple times if needed.
@@ -26,7 +29,9 @@ Therefore, `wii.sh -a -v` or `wii.sh -a doc` are invalid options and as per `wii
 
 
 Installation:
+
 —————————————
+
 
  - Clone with GIT
  ```
@@ -36,9 +41,10 @@ Installation:
  $ touch ~/.profile
  $ echo "[ -d ~/scripts/wii ] && PATH=\"~/scripts/wii:\$PATH\"" >> ~/.profile 
  ```
-  Log out and log in again.
- 
- 
+Log out and log in again.
+
+
+
   - Download ZIP
  ```
  $ mkdir ~/scripts
@@ -50,4 +56,4 @@ Installation:
  $ touch ~/.profile
  $ echo "[ -d ~/scripts/wii ] && PATH=\"~/scripts/wii:\$PATH\"" >> ~/.profile 
  ```
-  Log out and log in again.
+Log out and log in again.
