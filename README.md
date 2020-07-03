@@ -16,3 +16,6 @@ example for using predefined extensions: `wii.sh -a`
 Custom extensions (`mp3`, `jpg`, etc.) and predefined extensions (`--audio`, `--video` etc.) can not be combined. Only custom extensions may be used multiple times if needed.
 
 Therefore, `wii.sh -a -v` or `wii.sh rtf -d` are invalid options and as per `wii.sh -d jpg gif` -> `jpg gif` would be ignored.
+
+
+![](https://imgur.com/mVeYzWC)
