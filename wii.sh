@@ -36,7 +36,7 @@ local desc=""              # description of predefined extensions
 local help=0               # counter of matching directories that contain the queried file type(s)
 local start=$(date +%s)    # start measuring elapsed time
 
-ss=${s//[^[:alnum:] _-~]/}          # sanitize user's input
+ss=${s//[^[:alnum:] _\-~]/} # sanitize user's input
 
 if [ "${ss}" != "${s}" ]
 then
@@ -55,13 +55,16 @@ case $s in
   --help | -h)
     help=1 # Don't display a summary
     echo "What's In It? wii v2.0.1 by Jazz"
+    echo
     echo "Usage: wii.sh [-h] [--image|-i] [--audio|-a] [--video|-v] [--document|-d] [--archive|-r] [--font|-f] [--programming|-p] [extension(s)]"
     echo
-    echo "example for using a custom extension: 'wii.sh php theme module inc js'"
-    echo "example for using predefined extensions: 'wii.sh -a'"
-    echo "Custom extensions (mp3, jpg, etc.) and predefined extensions (--audio, --video etc.) can not be combined. Custom extensions could be multiplied."
-    echo "Therefore, 'wii.sh -a -v' or 'wii.sh -a doc' are invalid options and as per 'wii.sh -a jpg gif' -> 'jpg gif' will be ignored."
-    echo "Since the script is designed to search for common file types, only alphanumeric values are accepted within custom extensions."
+    echo "Examples:"
+    echo "========="
+    echo "Custom extension: wii.sh php theme module inc js"
+    echo "Predefined extensions: wii.sh -a"
+    echo
+    echo "Custom extensions (mp3, jpg, etc.) and predefined extensions (--audio, --video etc.) can not be combined."
+    echo "Therefore, 'wii.sh -a -v' or 'wii.sh -a doc' are invalid options and as per 'wii.sh -a jpg gif' -> 'jpg gif' would be ignored. Only alphanumeric, space, underscore, dash and tilda are accepted as valid custom extensions."
     ;;
 
   --image | -i)
