@@ -10,9 +10,8 @@ Usage:
 `wii.sh [--help|-h] [--image|-i] [--audio|-a] [--video|-v] [--document|-d] [--archive|-r] [--font|-f] [--programming|-p] [extension(s)]`
 
 
-Examples:
-
-——————————
+## Examples:
+-----------
 
 Custom extension: `wii.sh php theme module inc js`
 
@@ -28,32 +27,31 @@ Therefore, `wii.sh -a -v` or `wii.sh -a doc` are invalid options and as per `wii
 ![wii demo](https://media1.giphy.com/media/f3eRDZtNeBl39hFb50/giphy.gif)
 
 
-Installation:
-
-—————————————
+## Installation:
+--------------
 
 
  - Clone with GIT
- ```
- $ mkdir ~/scripts
- $ cd ~/scripts
- $ git clone https://github.com/madjoe/wii.git
- $ touch ~/.profile
- $ echo "[ -d ~/scripts/wii ] && PATH=\"~/scripts/wii:\$PATH\"" >> ~/.profile 
- ```
+```
+$ mkdir ~/scripts
+$ cd ~/scripts
+$ git clone https://github.com/madjoe/wii.git
+$ touch ~/.profile
+$ echo "[ -d ~/scripts/wii ] && PATH=\"~/scripts/wii:\$PATH\"" >> ~/.profile 
+```
 Log out and log in again.
 
-
+--------------
 
   - Download ZIP
- ```
- $ mkdir ~/scripts
- $ cd ~/scripts
- $ wget https://github.com/madjoe/wii/archive/master.zip -O wii.zip
- $ unzip wii.zip
- $ mv -i wii-master wii
- $ rm wii.zip
- $ touch ~/.profile
- $ echo "[ -d ~/scripts/wii ] && PATH=\"~/scripts/wii:\$PATH\"" >> ~/.profile 
- ```
+```
+$ mkdir ~/scripts
+$ cd ~/scripts
+$ wget https://github.com/madjoe/wii/archive/master.zip -O wii.zip
+$ unzip wii.zip
+$ mv -i wii-master wii
+$ rm wii.zip
+$ touch ~/.profile
+$ echo "[ -d ~/scripts/wii ] && PATH=\"~/scripts/wii:\$PATH\"" >> ~/.profile 
+```
 Log out and log in again.
