@@ -58,7 +58,7 @@ case $s in
     echo
     echo "Usage:"
     echo "======"
-    echo "wii.sh [-h] [--image|-i] [--audio|-a] [--video|-v] [--document|-d] [--ebook|-e] [--archive|-r] [--font|-f] [--programming|-p] [custSom extension(s)]"
+    echo "wii.sh [-h] [--image|-i] [--audio|-a] [--video|-v] [--document|-d] [--ebook|-e] [--archive|-r] [--font|-f] [--programming|-p] [custom extension(s)]"
     echo
     echo "Examples:"
     echo "========="
