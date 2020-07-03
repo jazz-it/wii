@@ -36,7 +36,7 @@ local desc=""              # description of predefined extensions
 local help=0               # counter of matching directories that contain the queried file type(s)
 local start=$(date +%s)    # start measuring elapsed time
 
-ss=${s//^[\w -]/}          # sanitize user's input
+ss=${s//[^[:alnum:] _-~]/}          # sanitize user's input
 
 if [ "${ss}" != "${s}" ]
 then
