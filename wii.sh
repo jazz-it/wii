@@ -2,8 +2,8 @@
 # What's In It? by Jazz v2.0.1
 # Prints a short summary of the content of any directory by listing extensions and the number of files for each type found
 
-me="$(basename "$(test -L "$0" && readlink "$0" || echo "$0")")"
 color=False
+me="$(basename "$(test -L "$0" && readlink "$0" || echo "$0")")"
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source "$DIR/inc/spinner.sh" 2> /dev/null
 shopt -s extglob # enable extglob whilst running the script in non-interactive shell (enabled by default for interactive one)!
@@ -36,7 +36,7 @@ local desc=""              # description of predefined extensions
 local help=0               # counter of matching directories that contain the queried file type(s)
 local start=$(date +%s)    # start measuring elapsed time
 
-ss=${s//[^a-zA-Z0-9\s\-]/} # sanitize user's input
+ss=${s//^[\w -]/}          # sanitize user's input
 
 if [ "${ss}" != "${s}" ]
 then
