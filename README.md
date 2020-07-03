@@ -9,7 +9,16 @@ Prints a short summary of specific content types recursively by listing correspo
 ## Usage: 
 
 ```
-wii.sh [--help|-h] [--image|-i] [--audio|-a] [--video|-v] [--document|-d] [--ebook|-e] [--archive|-r] [--font|-f] [--programming|-p] [extension(s)]
+wii.sh [--help|-h] 
+       [--image|-i] 
+       [--audio|-a] 
+       [--video|-v] 
+       [--document|-d] 
+       [--ebook|-e] 
+       [--archive|-r] 
+       [--font|-f] 
+       [--programming|-p] 
+       [custom extension(s)]
 ```
 
 
@@ -41,7 +50,7 @@ $ git clone https://github.com/madjoe/wii.git
 $ touch ~/.profile
 $ echo "[ -d ~/utils/wii ] && PATH=\"~/utils/wii:\$PATH\"" >> ~/.profile 
 ```
-Log out and log in again.
+> Log out and log in again.
 
 --------------
 
@@ -56,6 +65,6 @@ $ rm wii.zip
 $ touch ~/.profile
 $ echo "[ -d ~/utils/wii ] && PATH=\"~/utils/wii:\$PATH\"" >> ~/.profile 
 ```
-Log out and log in again.
+> Log out and log in again.
 
 --------------
