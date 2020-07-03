@@ -11,7 +11,6 @@ Usage:
 
 
 ## Examples:
------------
 
 Custom extension: `wii.sh php theme module inc js`
 
@@ -28,8 +27,6 @@ Therefore, `wii.sh -a -v` or `wii.sh -a doc` are invalid options and as per `wii
 
 
 ## Installation:
---------------
-
 
  - Clone with GIT
 ```
