@@ -61,7 +61,7 @@ case $s in
     echo "example for using predefined extensions: 'wii.sh -a'"
     echo "Custom extensions (mp3, jpg, etc.) and predefined extensions (--audio, --video etc.) can not be combined. Custom extensions could be multiplied."
     echo "Therefore, 'wii.sh -a -v' or 'wii.sh -a doc' are invalid options and as per 'wii.sh -a jpg gif' -> 'jpg gif' will be ignored."
-    echo "Since the script helps you to seek for common file types, therefore only alphanumeric values are accepted within custom extensions"
+    echo "Since the script is designed to search for common file types, only alphanumeric values are accepted within custom extensions."
     ;;
 
   --image | -i)
