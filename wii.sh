@@ -91,6 +91,12 @@ case $s in
     _wii_set_bundle "${bundle}"
     ;;
 
+  --ebook | -e)
+    desc=" common ebook"
+    bundle="epub mobi azw azw3 iba pdf lrs lrf lrx fb2 djvu lit rft"
+    _wii_set_bundle "${bundle}"
+    ;;
+
   --archive | -r)
     desc=" common archive"
     bundle="7z rar zip arj deb tar gz z iso"
