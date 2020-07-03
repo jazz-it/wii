@@ -2,33 +2,15 @@
 # What's In It? by Jazz v2.0.1
 # Prints a short summary of the content of any directory by listing extensions and the number of files for each type found
 
-color=False
-me="$(basename "$(test -L "$0" && readlink "$0" || echo "$0")")"
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-source "$DIR/inc/spinner.sh" 2> /dev/null
-shopt -s extglob # enable extglob whilst running the script in non-interactive shell (enabled by default for interactive one)!
-
-# check if stdout is a terminal...
-if test -t 1; then
-
-    # see if it supports colors...
-    ncolors=$(tput colors)
-
-    if test -n "$ncolors" && test $ncolors -ge 8; then
-        color=True
-    fi
-fi
-
 # helper function for _wii_core(): constructing crucial parts of find command
 _wii_set_bundle() {
-if [ ! -z "${1}" ]
-then
-  bundle="\\( -type f -iname \"*.${1//+( )/\" -printf "'"%D:%i\\0%b\\0%h\\0%f\\0"'" \\) -o \\( -type f -iname \"*.}\" -printf '%D:%i\0%b\0%h\0%f\0' \\)" # extglob "+( )"
-fi
+  if [ ! -z "${1}" ]
+  then
+    bundle="\\( -type f -iname \"*.${1//+( )/\" -printf "'"%D:%i\\0%b\\0%h\\0%f\\0"'" \\) -o \\( -type f -iname \"*.}\" -printf '%D:%i\0%b\0%h\0%f\0' \\)" # extglob "+( )"
+  fi
 }
 
-
-# Main function
+# Core function
 _wii_core() {
 bundle=0
 local s="${1:-0}"            # parameters
@@ -205,17 +187,43 @@ runtime=$((end-start))
 }
 
 
-# Wrapper
-# Check if the spinner function exists (bash specific)
-if declare -f "spinner" > /dev/null && [ "${1}" != "-h" ] && [ "${1}" != "--help" ]
-then
-  # Call _wii_core in the background with the same arguments, call the spinner
-  set +m
-  _wii_core "$@" &
-  pid=$!
-  spinner $pid
-  set -m
+wii() {
+  color=False
+  me="$(basename "$(test -L "$0" && readlink "$0" || echo "$0")")"
+  DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+  source "$DIR/inc/spinner.sh" 2> /dev/null
+  shopt -s extglob # enable extglob whilst running the script in non-interactive shell (enabled by default for interactive one)!
+  
+  # check if stdout is a terminal...
+  if test -t 1; then
+    # see if it supports colors...
+    ncolors=$(tput colors)
+  
+    if test -n "$ncolors" && test $ncolors -ge 8; then
+      color=True
+    fi
+  fi
+
+  # Wrapper
+  # Check if the spinner function exists (bash specific)
+  if declare -f "spinner" > /dev/null && [ "${1}" != "-h" ] && [ "${1}" != "--help" ]
+  then
+    # Call _wii_core in the background with the same arguments, call the spinner
+    set +m
+    _wii_core "$@" &
+    pid=$!
+    spinner $pid
+    set -m
+  else
+    # Avoid spinner
+    _wii_core "$@"
+  fi
+}
+
+
+# bash vs. zsh support
+if [ "${BASH_SOURCE[0]}" == "$0" ]; then
+  wii "$@"
 else
-  # Avoid spinner
-  _wii_core "$@"
+  export -f wii
 fi
