@@ -47,11 +47,8 @@ Custom extensions (`mp3`, `jpg`, etc.) and predefined extensions (`--audio`, `--
 $ mkdir "$HOME"/utils
 $ cd "$HOME"/utils
 $ git clone https://github.com/madjoe/wii.git
-$ chmod 755 "$HOME"/utils/wii/wii.sh "$HOME"/utils/wii/inc/spinner.sh
-$ touch "$HOME"/.profile
-$ echo "[ -d \"\$HOME\"/utils/wii ] && PATH=\"\$HOME/utils/wii:\$PATH\"" >> "$HOME"/.profile 
 ```
-> Log out and log in again.
+> Continue with step 3.
 
 --------------
 
@@ -63,10 +60,29 @@ $ wget https://github.com/madjoe/wii/archive/master.zip -O wii.zip
 $ unzip wii.zip
 $ mv -i wii-master wii
 $ rm wii.zip
-$ chmod 755 "$HOME"/utils/wii/wii.sh "$HOME"/utils/wii/inc/spinner.sh
-$ touch "$HOME"/.profile
-$ echo "[ -d \"\$HOME\"/utils/wii ] && PATH=\"\$HOME/utils/wii:\$PATH\"" >> "$HOME"/.profile 
 ```
-> Log out and log in again.
+> Continue with step 3.
 
 --------------
+
+ 3. **Integration with shell**
+```
+$ OK="Installation complete!"; NOZSH="You don't use zsh. Try with the next command."; NOBASH="You don't use bash either. Please update your \$PATH manually."
+$ chmod 755 "$HOME"/utils/wii/wii.sh "$HOME"/utils/wii/inc/spinner.sh
+$ [ "$SHELL" = *"zsh" ] && echo "[ -d \"\$HOME\"/utils/wii ] && export PATH=\"\$HOME/utils/wii:\$PATH\"" >> "$HOME"/.zshrc && echo "$OK" || echo "$NOZSH"
+$ [ "$SHELL" = *"bash" ] && echo "[ -d \"\$HOME\"/utils/wii ] && PATH=\"\$HOME/utils/wii:\$PATH\"" >> "$HOME"/.bashrc && echo "$OK" || echo "$NOBASH"
+```
+> If one of the last two commands returned "Installation complete!" then you have 
+> successfully installed the script and you can start using it. Try: `cd && wii.sh -d`
+
+--------------
+
+## How do I uninstall wii.sh?
+
+```
+$ rm - rf "$HOME"/utils/wii
+$ [ "$(ls -A "$HOME"/utils 2> /dev/null)" == "" ] && rm -rf "$HOME"/utils || echo "Directory ~/utils is not empty."
+$ [ "$SHELL" = *"zsh" ] && nano "$HOME"/.zshrc
+$ [ "$SHELL" = *"bash" ] && nano "$HOME"/.bashrc
+```
+> Go to the bottom of the file and delete the entire line that contains `"PATH="$HOME/utils/wii:$PATH"`
