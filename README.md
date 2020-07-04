@@ -73,14 +73,14 @@ $ [ "$SHELL" = *"zsh" ] && echo "[ -d \"\$HOME\"/utils/wii ] && export PATH=\"\$
 $ [ "$SHELL" = *"bash" ] && echo "[ -d \"\$HOME\"/utils/wii ] && PATH=\"\$HOME/utils/wii:\$PATH\"" >> "$HOME"/.bashrc && echo "$OK" || echo "$NOBASH"
 ```
 > If one of the last two commands returned "Installation complete!" then you have 
-> successfully installed the script and you can start using it. Try: `cd && wii.sh -d`
+> successfully installed the script and you may start using it. Try: `cd && wii.sh -d`
 
 --------------
 
 ## How do I uninstall wii.sh?
 
 ```
-$ rm - rf "$HOME"/utils/wii
+$ rm -rf "$HOME"/utils/wii
 $ [ "$(ls -A "$HOME"/utils 2> /dev/null)" == "" ] && rm -rf "$HOME"/utils || echo "Directory ~/utils is not empty."
 $ [ "$SHELL" = *"zsh" ] && nano "$HOME"/.zshrc
 $ [ "$SHELL" = *"bash" ] && nano "$HOME"/.bashrc
