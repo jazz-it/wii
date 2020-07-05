@@ -267,7 +267,7 @@ LC_ALL=C eval "find . ${bundle}" | gawk -v custom="${f}" -v desc="${desc}" -v co
           f_color()
           printf "  %s%s%s %s\n", lightgrey, summary_size, nc, ext
         } else {
-          printf "%9g %s\n", cnt[dir][ext], ext
+          printf "%s%9g%s %s\n", lightgrey, cnt[dir][ext], nc, ext
         }
         if (++m >= max) break
       }
@@ -284,7 +284,7 @@ LC_ALL=C eval "find . ${bundle}" | gawk -v custom="${f}" -v desc="${desc}" -v co
           f_color()
           printf "  %s%s %s%s %s(%s)%s\n", lightgrey, summary_size, nc, ext, yellow, num[ext], nc
         } else {
-          printf "%9g %s\n", extensions[ext], ext
+          printf "%s%9g%s %s\n", lightgrey, extensions[ext], nc, ext
         }
         if (++n >= max) break
       }
