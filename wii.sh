@@ -194,9 +194,6 @@ else
   fi
 fi
 
-printf "%s\n" "${bundle}"
-exit 0
-
 LC_ALL=C eval "find . ${bundle}" | gawk -v custom="${f}" -v desc="${desc}" -v color="${color}" -v 'RS=\0' -v OFS='\t' -v max=50 '
   BEGIN {
     if (! color) {
