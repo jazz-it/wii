@@ -178,15 +178,15 @@ then
   bundle="\\( -type f -iname \"*.*\" -printf '%D:%i\0%b\0%h\0%f\0' \\)"
 else
   # check if there are any predefined extensions
-  if [ "${p}" -gt 0 ];
+  if [ "${f}" -gt 0 ];
   then
-    _wii_set_bundle "${bundle_p}"
+    bundle="${flags}"
   elif [ "${e}" -gt 0 ];
   then
     _wii_set_bundle "${bundle_e}"
-  elif [ "${f}" -gt 0 ];
+  elif [ "${p}" -gt 0 ];
   then
-    bundle="${flags}"
+    _wii_set_bundle "${bundle_p}"
   else
     printf "%s: invalid options -- '%s'\n" "${me}" "${s}"
     printf "Try '%s --help' for more information.\n" "${me}"
