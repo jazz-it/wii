@@ -212,6 +212,7 @@ LC_ALL=C eval "find . ${bundle}" | gawk -v custom="${f}" -v desc="${desc}" -v co
       orange="\033[38;5;172m"
       yellow="\033[38;5;3m"
       lightcyan="\033[38;5;74m"
+      lightgrey="\033[38;5;250m"
       nc="\033[0m"
   }
   function human(x) {
@@ -262,8 +263,9 @@ LC_ALL=C eval "find . ${bundle}" | gawk -v custom="${f}" -v desc="${desc}" -v co
       for (ext in cnt[dir]) {
         if (custom != 0) {
           f_nocolor()
-          printf "  %s %s\n", human(cnt[dir][ext] * 512), ext
+          summary_size = human(cnt[dir][ext] * 512)
           f_color()
+          printf "  %s%s%s %s\n", lightgrey, summary_size, nc, ext
         } else {
           printf "%9g %s\n", cnt[dir][ext], ext
         }
@@ -277,8 +279,10 @@ LC_ALL=C eval "find . ${bundle}" | gawk -v custom="${f}" -v desc="${desc}" -v co
       printf "%s[%s%s] %stotal%s\n", yellow, orange, human(total * 512), yellow, nc
       for (ext in extensions) {
         if (custom != 0) {
+          f_nocolor()
           summary_size = human(extensions[ext] * 512)
-          printf "  %s%s %s%s %s(%s)%s\n", orange, summary_size, nc, ext, yellow, num[ext], nc
+          f_color()
+          printf "  %s%s %s%s %s(%s)%s\n", lightgrey, summary_size, nc, ext, yellow, num[ext], nc
         } else {
           printf "%9g %s\n", extensions[ext], ext
         }
