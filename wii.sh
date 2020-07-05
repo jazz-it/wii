@@ -209,7 +209,7 @@ LC_ALL=C eval "find . ${bundle}" | gawk -v custom="${f}" -v desc="${desc}" -v co
       nc=""
   }
   function f_color() {
-      orange="\033[38;5;9m"
+      orange="\033[38;5;214m"
       yellow="\033[38;5;3m"
       lightcyan="\033[0;96m"
       nc="\033[0m"
