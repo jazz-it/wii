@@ -205,14 +205,14 @@ LC_ALL=C eval "find . ${bundle}" | gawk -v custom="${f}" -v desc="${desc}" -v co
   function f_nocolor() {
       orange=""
       yellow=""
-      lightcyan=""
+      lightblue=""
       nc=""
   }
   function f_color() {
       orange="\033[38;5;220m"
       yellow="\033[38;5;222m"
-      lightcyan="\033[38;5;74m"
-      lightgrey="\033[38;5;250m"
+      lightblue="\033[38;5;10m"
+      lightgrey="\033[38;5;249m"
       nc="\033[0m"
   }
   function human(x) {
@@ -259,7 +259,7 @@ LC_ALL=C eval "find . ${bundle}" | gawk -v custom="${f}" -v desc="${desc}" -v co
     PROCINFO["sorted_in"] = "@val_num_desc"
     for (dir in sum) {
       m = 0
-      printf "%s[%s%s] %s%s%s\n", yellow, orange, human(sum[dir] * 512), lightcyan, gensub(/^\.\//, "", "g", dir), nc
+      printf "%s[%s%s] %s%s%s\n", yellow, orange, human(sum[dir] * 512), lightblue, gensub(/^\.\//, "", "g", dir), nc
       for (ext in cnt[dir]) {
         if (custom != 0) {
           f_nocolor()
