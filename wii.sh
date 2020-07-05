@@ -59,14 +59,11 @@ while test $# -gt 0; do
       if test $# -gt 0; then
         desc_element=""
         flags_element="${1}"
-        # printf -- "1. %s\n" "${flags_element}"
         flags_element=$(printf "%s" "${flags_element}" | sed 's/-printf \+["'\''"]\+[^"'\'']\+["'\'']\+/-printf '\''%D:%i\\0%b\\0%h\\0%f\\0'\''/g')
         if [[ "$flags_element" != *"printf"* ]]; then
           flags_element="${flags_element} -printf '%D:%i\0%b\0%h\0%f\0'"
         fi
         flags="${flags_element[@]}"
-        # printf -- "2. %s\n" "${flags}"
-        # exit 0
         f=1
         shift
       else
