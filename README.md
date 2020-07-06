@@ -1,7 +1,7 @@
 # wii
 **What's In It?**
 
-Prints a short summary of specific content types recursively by listing corresponding disk usage for each directory. The script will sort results by size in reverse order. If there are many directories found, the script will limit the output to top 50 largest directories.
+Prints a short summary of specific content types recursively by listing corresponding disk usage for each directory. The script will order results by size in reverse. If there are many directories found, the script will limit the output to top 50 largest directories.
 
 > This project may be used as a demonstration for `du` project as a usecase for a new `--include` parameter. 
 > Users would be able to measure disk usage of specific file types, which is currently not supported.
@@ -49,7 +49,7 @@ $ wii -c "-type f -iname '*.txt'"
 > Parameter of the -c flag will be passed to find directly with a single exception only: 
 > in multiple conditions as per above examples, you should use -printf 'wii'
 
-In case you try to mix the modes from above, 'wii' will apply the following rule in order to prioritize it:
+In case you try to mix the modes from above, 'wii' will apply the following rule in group to prioritize it:
  - HIGH: Advanced mode
  - MEDIUM: Custom extensions
  - LOW: Predefined extensions
@@ -59,7 +59,7 @@ In case you try to mix the modes from above, 'wii' will apply the following rule
 $ wii -C 0 -D 10 -F 0 -T 5 -S 0 -avd
 ```
 > -C: integer: 0 = no colors, 1 = use colors, default: 1\
-> -G: integer: 0 = sort by filenames, 1 = sort by extensions, default: 1\
+> -G: integer: 0 = group by filenames, 1 = group by extensions, default: 1\
 > -D: integer: maximum number of directories listed, default: 50\
 > -F: integer: maximum number of largest items listed per each directory, default: 50\
 > -T: integer: maximum number of largest items listed in total summary, default: 50\
@@ -91,7 +91,7 @@ $ wii -c "\( -type f -iname '*.tmp' -printf 'wii' \) -o \( -type f -iname '*~' -
         1 tmp
         1 kbx~
 ```
-> -G 1: sort results by extensions\
+> -G 1: group results by extensions\
 > -D 5: list max. 5 largest directories\
 > -F 1: list max. 1 largest files (by extensions) per each directory\
 > -T 3: list max. 3 largest accumulated file sizes (by extensions) in total summary
@@ -108,7 +108,7 @@ $ wii -C 0 -G 1 -D 0 -F 0 -T 5 -S 0 -avd
       138 csv
 ```
 > -C 0: don't use colors for output\
-> -G 0: sort results by extensions\
+> -G 1: group results by extensions\
 > -D 0: don't list directories\
 > -F 0: don't list files (by extensions) per each directory\
 > -T 5: list max. 5 largest accumulated file sizes (by extensions) in total summary\
@@ -127,7 +127,7 @@ $ wii -C 0 -G 0 -D 0 -F 0 -T 5 -S 0 -avd
   310.6MB 20200701_164008.mp4 (1)
 ```
 > Similar as per previous example, only one parameter has been changed:\
-> -G 0: sort results by files\
+> -G 0: group results by filenames\
 > We may notice there are multiple files found within the structure that use the same filename.
 
 
