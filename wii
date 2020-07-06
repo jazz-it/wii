@@ -270,7 +270,7 @@ LC_ALL=C eval "find . ${bundle}" | gawk -v custom="${f}" -v grp="${grp}" -v desc
       nc="\033[0m"
   }
   function human(x, c) {
-      if (x<1000) {return sprintf ("%5.0g",x) "·b"} else {x/=1024}
+      if (x<1000) {return sprintf ("%5.0g",x) "·B"} else {x/=1024}
       s="KMGTEPZY";
       while (x>=1000 && length(s)>1)
           {x/=1024; s=substr(s,2)}
