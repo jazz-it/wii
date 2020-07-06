@@ -1,7 +1,7 @@
 # wii
 **What's In It?**
 
-Prints a short summary of specific content types recursively by listing corresponding disk usage for each directory. The script will order results by size in reverse. If there are many directories found, the script will limit the output to top 50 largest directories.
+Prints a short summary of specific content types recursively by listing corresponding disk usage for each directory. The script will order results by size in reverse. If you run the script without any arguments and if many directories  are found, the output will be truncated to top 50 largest directories (by default).
 
 > This project may be used as a demonstration for `du` project as a usecase for a new `--include` parameter. 
 > Users would be able to measure disk usage of specific file types, which is currently not supported.
@@ -11,8 +11,8 @@ Prints a short summary of specific content types recursively by listing correspo
 ```
 wii [-h] 
     [-a|d|e|f|i|p|r|v] 
-    [-c "<arguments for 'find'>"] 
-    [-C|D|F|G|S|T <variables>] 
+    [-c "<arguments for `find`>"] 
+    [-C|D|F|G|S|T <integer value>] 
     [-x "<custom extension(s)>"]
 ```
 
@@ -37,8 +37,8 @@ $ wii -av
 $ wii -x "bkp log tmp dmp py~"
 ```
 > In case you don't find predefined extensions fit for the job, you could 
-> manually enter as many keywords as you like, separated by a single whitespace.\
-> Note: you should avoid using leading dots in front of file extensions.
+> manually enter as many keywords as you like, using a whitespace as a delimiter.\
+> Note: you should avoid using commas, or leading dots in front of each extension.
 
 ### 3) Advanced mode:
 ```
@@ -46,8 +46,8 @@ $ wii -c "\( -type f -mtime -7 -printf 'wii' \) -o \( -type f -name 'log.txt' -p
 $ wii -c "\( -type f -iname '*.pdf' -printf 'wii' \) -o \( -type f -iname '*.doc*' -printf 'wii' \)"
 $ wii -c "-type f -iname '*.txt'"
 ```
-> Parameter of the -c flag will be passed to find directly with a single exception only: 
-> in multiple conditions as per above examples, you should use -printf 'wii'
+> Important: Parameter of the -c flag will be passed to find directly with a single exception only: 
+> in multiple conditions as per above examples, you should use -printf 'wii' for each condition.
 
 In case you try to mix the modes from above, 'wii' will apply the following rule in group to prioritize it:
  - HIGH: Advanced mode
@@ -63,7 +63,7 @@ $ wii -C 0 -D 10 -F 0 -T 5 -S 0 -avd
 > -D: integer: maximum number of directories listed, default: 50\
 > -F: integer: maximum number of largest items listed per each directory, default: 50\
 > -T: integer: maximum number of largest items listed in total summary, default: 50\
-> -S: integer: 0 = don't use spinner, 1 = use spinner, default: 1
+> -S: integer: 0 = don't use a spinner, 1 = use spinner, default: 1
 
 
 ## Demo:
