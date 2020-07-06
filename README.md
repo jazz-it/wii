@@ -9,35 +9,160 @@ Prints a short summary of specific content types recursively by listing correspo
 ## Usage: 
 
 ```
-wii.sh [--help|-h] 
-       [--image|-i] 
-       [--audio|-a] 
-       [--video|-v] 
-       [--document|-d] 
-       [--ebook|-e] 
-       [--archive|-r] 
-       [--font|-f] 
-       [--programming|-p] 
-       [custom extension(s)]
+wii [-h] 
+    [-a|d|e|f|i|p|r|v] 
+    [-c "<arguments for 'find'>"] 
+    [-C|D|F|G|S|T <variables>] 
+    [-x "<custom extension(s)>"]
 ```
 
+***wii has 3 different modes of operation which should be used separately:***
 
-## Examples:
+### 1) Predefined extensions:
+```
+$ wii -av
+```
+> -a: audio    (mp3 flac m4a mpa aif ogg wav wma dsd dsf dff)
+> -d: document (doc docx xls xlsx rtf ppt pptx pps pdf csv mdb ods odp odt txt)
+> -e: ebook    (epub mobi azw azw3 iba pdf lrs lrf lrx fb2 djvu lit rft)
+> -f: font     (ttf otf fon fnt)
+> -i: image    (jpg jpeg png gif bmp tif tiff svg ai webp)
+> -p: coding   (php py c cs cpp css htm html java js theme module inc pl sh)
+> -r: archive  (7z rar zip arj deb tar gz z iso)
+> -v: video    (mp4 mov mpg mpeg mkv m4v avi 3gp 3g2 h264 wmv vob)
+> You may combine the flags e.g. wii -ie, for listing all image and ebook files.
 
-Custom extension: `wii.sh php theme module inc js`
+### 2) Custom extensions:
+```
+$ wii -x "bkp log tmp dmp py~"
+```
+> In case you don't find predefined extensions fit for the job, you could 
+> manually enter as many keywords as you like, separated by a single whitespace.
+> Note: you should avoid using leading dots in front of file extensions.
 
-Predefined extensions: `wii.sh -a`
+### 3) Advanced mode:
+```
+$ wii -c "\( -type f -mtime -7 -printf 'wii' \) -o \( -type f -name 'log.txt' -printf 'wii' \)"
+$ wii -c "\( -type f -iname '*.pdf' -printf 'wii' \) -o \( -type f -iname '*.doc*' -printf 'wii' \)"
+$ wii -c "-type f -iname '*.txt'"
+```
+> Parameter of the -c flag will be passed to find directly with a single exception only:
+> in multiple conditions as per above examples, you should use -printf 'wii'
 
+In case you try to mix the modes from above, 'wii' will apply the following rule in order to prioritize it:
+ - HIGH: Advanced mode
+ - MEDIUM: Custom extensions
+ - LOW: Predefined extensions
 
-Custom extensions (`mp3`, `jpg`, etc.) and predefined extensions (`--audio`, `--video` etc.) can not be combined. Only custom extensions may be used multiple times if needed.
-
-> Therefore, `wii.sh -a -v` or `wii.sh -a doc` are invalid options and as per `wii.sh -a jpg gif` 🠖 
-> `jpg gif` would be ignored. Only alphanumeric, space, underscore, dash and tilde are accepted as valid characters.
+### Altering defaults:
+```
+$ wii -C 0 -D 10 -F 0 -T 5 -S 0 -avd
+```
+> -C: integer: 0 = no colors, 1 = use colors, default: 1
+> -G: integer: 0 = sort by filenames, 1 = sort by extensions, default: 1
+> -D: integer: maximum number of directories listed, default: 50
+> -F: integer: maximum number of largest items listed per each directory, default: 50
+> -T: integer: maximum number of largest items listed in total summary, default: 50
+> -S: integer: 0 = don't use spinner, 1 = use spinner, default: 1
 
 
 ## Demo:
 
 ![wii demo](https://media1.giphy.com/media/f3eRDZtNeBl39hFb50/giphy.gif)
+
+
+## Advanced Examples
+
+```
+$ wii -c "\( -type f -iname '*.tmp' -printf 'wii' \) -o \( -type f -iname '*~' -printf 'wii' \)" -G 1 -D 5 -F 1 -T 3
+[592.5KB] Documents/Bookstore/temp/shared/common/includes/sys
+        1 tmp
+[ 64.5KB] Documents/Books/Python Workout/code/chapter 10
+       17 py~
+[ 56.5KB] Documents/Books/Python Workout/code/chapter 09
+       14 py~
+[ 56.5KB] Documents/Books/Python Workout/code/chapter 07
+       14 py~
+[ 40.5KB] .gnupg
+        1 kbx~
+———————————————
+[996.5KB] total
+       96 py~
+        1 tmp
+        1 kbx~
+```
+> -G 1: sort results by extensions
+> -D 5: list max. 5 largest directories
+> -F 1: list max. 1 largest files (by extensions) per each directory
+> -T 3: list max. 3 largest accumulated file sizes (by extensions) in total summary
+
+
+```
+$ wii -C 0 -G 1 -D 0 -F 0 -T 5 -S 0 -avd
+———————————————
+[36.43GB] total
+     4672 txt
+      512 mp4
+      354 pdf
+      333 mp3
+      138 csv
+```
+> -C 0: don't use colors for output
+> -G 0: sort results by extensions
+> -D 0: don't list directories
+> -F 0: don't list files (by extensions) per each directory
+> -T 5: list max. 5 largest accumulated file sizes (by extensions) in total summary
+> -S 0: don't use spinner
+> -avd: list all audio, video and document files
+
+
+```
+$ wii -C 0 -G 0 -D 0 -F 0 -T 5 -S 0 -avd
+———————————————
+[36.43GB] total
+  1.542GB project_yachts_intro.m4v (1)
+  476.4MB 20190527_120808.mp4 (1)
+  465.2MB 20200322_101232.mp4 (2)
+    322MB 20200101_000948.mp4 (2)
+  310.6MB 20200701_164008.mp4 (1)
+```
+> Similar as per previous example, only one parameter has been changed:
+> -G 0: sort results by files
+> We may notice there are multiple files found within the structure that use the same filename.
+
+
+```
+$ wii -D 5 -F 3 -T 4 -c "-type f -mtime -7 -iname '*log*'"
+[12.89MB] .config/chromium/Profile 1/Local Extension Settings/gighmnpiopklfepjosnamgckbiglidom
+  12.88MB 041367.log
+    8.5KB LOG
+    4.5KB LOG.old
+[4.984MB] .local/share/TelegramDesktop/tdata/user_data/cache/0
+  4.984MB binlog
+[ 3.25MB] .config/Rambox/Partitions/whatsapp_1/IndexedDB/https_web.whatsapp.com_0.indexeddb.leveldb
+  3.238MB 013778.log
+    8.5KB LOG
+    4.5KB LOG.old
+[2.898MB] .config/chromium/Profile 1/Local Extension Settings/ghbmnmjobekpmoecnmnilmnbdlolhkhi
+  2.891MB 000007.log
+    4.5KB LOG.old
+    4.5KB LOG
+[2.684MB] .config/chromium/Profile 1/Extension State
+  2.676MB 007638.log
+    4.5KB LOG.old
+    4.5KB LOG
+———————————————
+[34.62MB] total
+  12.88MB 041367.log (1)
+  6.941MB 000007.log (24)
+  5.164MB binlog (2)
+  3.238MB 016779.log (1)
+```
+> -D 5: list max. 5 largest directories
+> -F 3: don't list files (by extensions) per each directory
+> -T 4: list max. 4 largest accumulated files (by filenames) in total summary
+> -c: custom arguments for find: list all files that are at least 7 days old and contain *log* in their names
+> Note '-G 0' was not set explicitly, but it will be the default for advanced mode of operation (-c), unless we set it to '-G 1'.
 
 
 ## Installation:
@@ -68,16 +193,16 @@ $ rm wii.zip
  3. **Integration with shell**
 ```
 $ OK="Installation complete!"; NOZSH="You don't use zsh. Try with the next command."; NOBASH="You don't use bash either. Please update your \$PATH manually."
-$ chmod 755 "$HOME"/utils/wii/wii.sh "$HOME"/utils/wii/inc/spinner.sh
-$ [ "$SHELL" = *"zsh" ] && echo "[ -d \"\$HOME\"/utils/wii ] && export PATH=\"\$HOME/utils/wii:\$PATH\"" >> "$HOME"/.zshrc && echo "$OK" || echo "$NOZSH"
-$ [ "$SHELL" = *"bash" ] && echo "[ -d \"\$HOME\"/utils/wii ] && PATH=\"\$HOME/utils/wii:\$PATH\"" >> "$HOME"/.bashrc && echo "$OK" || echo "$NOBASH"
+$ chmod 755 "$HOME"/utils/wii/wii "$HOME"/utils/wii/inc/spinner.sh
+$ [ "$SHELL" = *"zsh" ] && echo "[ -d \"\$HOME\"/utils/wii ] && export PATH=\"\$HOME/utils/wii:\$PATH\"" >> "$HOME"/.zshrc && echo "$OK" && source "$HOME"/.zshrc || echo "$NOZSH"
+$ [ "$SHELL" = *"bash" ] && echo "[ -d \"\$HOME\"/utils/wii ] && PATH=\"\$HOME/utils/wii:\$PATH\"" >> "$HOME"/.bashrc && echo "$OK" && source "$HOME"/.bashrc || echo "$NOBASH"
 ```
 > If one of the last two commands returned "Installation complete!" then you have 
-> successfully installed the script and you may start using it. Try: `cd && wii.sh -d`
+> successfully installed the script and you may start using it. Try: `cd && wii -d`
 
 --------------
 
-## How do I uninstall wii.sh?
+## How do I uninstall wii?
 
 ```
 $ rm -rf "$HOME"/utils/wii
