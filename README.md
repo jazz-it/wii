@@ -68,7 +68,7 @@ $ wii -C 0 -D 10 -F 0 -T 5 -S 0 -avd
 
 ## Demo:
 
-![wii demo](https://media1.giphy.com/media/f3eRDZtNeBl39hFb50/giphy.gif)
+![wii v2.2.x demo](https://media3.giphy.com/media/iJyFDDXbsqaKQ6T7qs/giphy.gif)
 
 
 ## Advanced Examples
