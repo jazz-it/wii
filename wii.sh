@@ -26,17 +26,18 @@ local help=0                 # counter of matching directories that contain the 
 local start=$(date +%s)      # start measuring elapsed time
 local maxf=50                # default limitation for displaying maximum files per each directory
 local maxd=50                # default limitation for displaying maximum directories
-bundle=""                    # main arguments/flags for `find`
+local maxt=50                # default limitation for displaying maximum files per total summary
+bundle=""                    # main generated arguments/flags for `find`
 
 
-while getopts 'hac:C:D:F:S:defiprvX:' flag; do
+while getopts 'hac:C:D:F:S:T:defiprvX:' flag; do
   case "${flag}" in
     h) # help
        echo "What's In It? wii v2.2.0 by Jazz"
        echo
        echo "Usage:"
        echo "======"
-       echo "wii.sh [-h] [-adefiprv] [-c \"<parameters for find>\"] [-CDFS <variables>] [-X \"<custom extension(s)>\"]"
+       echo "wii.sh [-h] [-a|d|e|f|i|p|r|v] [-c \"<arguments for 'find'>\"] [-C|D|F|S|T <variables>] [-X \"<custom extension(s)>\"]"
        echo
        echo "Examples:"
        echo "========="
@@ -51,6 +52,15 @@ while getopts 'hac:C:D:F:S:defiprvX:' flag; do
     C) continue ;; # colors: 0 = no colors; 1 = use colors (default: already set in wii())
 
     S) continue ;; # using spinner (default: already set in wii())
+
+    T) # altering defaults for showing total files summary (default: 50)
+       if [[ "${OPTARG}" =~ $re ]]; then
+         maxt="${OPTARG}"
+       else
+         echo "Invalid parameter set for -T (must be an integer value)."
+         exit 0
+       fi
+       ;;
 
     a) # predefined extensions: audio
        desc_element=" audio"
@@ -203,7 +213,7 @@ else
   fi
 fi
 
-LC_ALL=C eval "find . ${bundle}" | gawk -v custom="${f}" -v desc="${desc}" -v color="${color}" -v maxd="${maxd}" -v maxf="${maxf}" -v 'RS=\0' -v OFS='\t' '
+LC_ALL=C eval "find . ${bundle}" | gawk -v custom="${f}" -v desc="${desc}" -v color="${color}" -v maxd="${maxd}" -v maxf="${maxf}" -v maxt="${maxt}" -v 'RS=\0' -v OFS='\t' '
   BEGIN {
     if ( color == 0) {
       f_nocolor()
@@ -287,7 +297,7 @@ LC_ALL=C eval "find . ${bundle}" | gawk -v custom="${f}" -v desc="${desc}" -v co
       print "———————————————"
       printf "%s[%s%s] %stotal%s\n", yellow, orange, human(total * 512), yellow, nc
       for (ext in extensions) {
-        if (n++ >= maxf) break
+        if (n++ >= maxt) break
         if (custom != 0) {
           f_nocolor()
           summary_size = human(extensions[ext] * 512)
@@ -318,7 +328,7 @@ wii() {
   source "$DIR/inc/spinner.sh" 2> /dev/null
   shopt -s extglob # enable extglob whilst running the script in non-interactive shell (enabled by default for interactive one)!
 
-  while getopts 'hac:C:D:F:S:defiprvX:' flag; do
+  while getopts 'hac:C:D:F:S:T:defiprvX:' flag; do
     case "${flag}" in
       C) # altering defaults for colors
          if [[ "${OPTARG}" =~ $re ]]; then
