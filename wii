@@ -1,5 +1,5 @@
 #!/bin/bash
-# What's In It? by Jazz v2.2.0
+# What's In It? by Jazz v2.2.1
 # Prints a short summary of the content of any directory by listing extensions and the number of files for each type found
 
 
@@ -11,7 +11,7 @@ _wii_construct() {
   while getopts 'hac:C:D:F:G:S:T:defiprvx:' flag; do
     case "${flag}" in
       h) # help
-         echo "What's In It? wii v2.2.0 by Jazz"
+         echo "What's In It? wii v2.2.1 by Jazz"
          echo
          echo "Usage:"
          echo "======"
