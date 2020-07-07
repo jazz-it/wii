@@ -57,7 +57,7 @@ $ wii -c "\( -type f -iname '*.pdf' -printf 'wii' \) -o \( -type f -iname '*.doc
 [**find**](https://man7.org/linux/man-pages/man1/find.1.html) - check the syntax of `find` and apply the important notes from above accordingly
 
 
-In case you try to mix the modes from above, 'wii' will apply the following rule in group to prioritize it:
+In case you try to mix the 3 modes from above, `wii` will apply the following priority rule and execute the highest priority only:
  - HIGH: Advanced mode
  - MEDIUM: Custom extensions
  - LOW: Predefined extensions
