@@ -5,6 +5,20 @@
 
 # Allowed arguments for a regular operation
 _wii_construct() {
+  bundle_element=""      # parameter element for `find`
+  bundle_p=""            # parameter for `find` constructed with predefined extensions
+  bundle_e=""            # parameter for `find` constructed with custom extensions
+  p=0                    # predefined extensions detector
+  e=0                    # custom extensions detector
+  f=0                    # custom attributes for `find` detector
+  grp=9                  # grouping results: 0 = by filename, 1 = by extension, 9 = not set yet
+  desc=""                # description of predefined extensions
+  desc_element=""        # description element of predefined extensions
+  start=$(date +%s)      # start measuring elapsed time
+  maxf=50                # default limitation for displaying maximum files per each directory
+  maxd=50                # default limitation for displaying maximum directories
+  maxt=50                # default limitation for displaying maximum files per total summary
+  bundle=""              # main generated arguments/flags for `find`
 
   local OPTIND  # allowing to call getopts more than once
 
@@ -197,163 +211,146 @@ _wii_set_bundle() {
 
 # Core function
 _wii_core() {
-bundle_element=""      # parameter element for `find`
-bundle_p=""            # parameter for `find` constructed with predefined extensions
-bundle_e=""            # parameter for `find` constructed with custom extensions
-p=0                    # predefined extensions detector
-e=0                    # custom extensions detector
-f=0                    # custom attributes for `find` detector
-# s="${1:-0}"            # parameters
-grp=9                  # grouping results: 0 = by filename, 1 = by extension, 9 = not set yet
-desc=""                # description of predefined extensions
-desc_element=""        # description element of predefined extensions
-start=$(date +%s)      # start measuring elapsed time
-maxf=50                # default limitation for displaying maximum files per each directory
-maxd=50                # default limitation for displaying maximum directories
-maxt=50                # default limitation for displaying maximum files per total summary
-bundle=""              # main generated arguments/flags for `find`
 
+  # Process the arguments
+  _wii_construct "$@"
 
-_wii_construct "$@"
-
-
-# Setting priorities for predefined extensions (p-LOW), custom extensions (e-MEDIUM) and/or custom arguments (f-HIGH)
-if [ $((f+e+p)) == 0 ];
-then
-  # default behaviour if no parameters are passed
-  desc_element=""
-  bundle="\\( -type f -iname \"*.*\" -printf '%D:%i\0%b\0%h\0%f\0' \\)"
-else
-  if [ "${f}" != 0 ];
+  # Setting priorities for predefined extensions (p-LOW), custom extensions (e-MEDIUM) and/or custom arguments (f-HIGH)
+  if [ $((f+e+p)) == 0 ];
   then
-    # there are custom arguments for `find` defined
-    bundle="${flags}"
-  elif [ "${e}" != 0 ];
-  then
-    # there are custom extensions
-    _wii_set_bundle "${bundle_e}"
-  elif [ "${p}" != 0 ];
-  then
-    # there are predefined extensions
-    _wii_set_bundle "${bundle_p}"
+    # default behaviour if no parameters are passed
+    desc_element=""
+    bundle="\\( -type f -iname \"*.*\" -printf '%D:%i\0%b\0%h\0%f\0' \\)"
   else
-    # if nothing is set properly from above, we need to throw an error
-    printf "%s: invalid option -- '%s'\n" "${me}" "${bundle_e}"
-    printf "Try '%s -h' for more information.\n" "${me}"
-    exit 0
+    if [ "${f}" != 0 ];
+    then
+      # there are custom arguments for `find` defined
+      bundle="${flags}"
+    elif [ "${e}" != 0 ];
+    then
+      # there are custom extensions
+      _wii_set_bundle "${bundle_e}"
+    elif [ "${p}" != 0 ];
+    then
+      # there are predefined extensions
+      _wii_set_bundle "${bundle_p}"
+    else
+      # if nothing is set properly from above, we need to throw an error
+      printf "%s: invalid option -- '%s'\n" "${me}" "${bundle_e}"
+      printf "Try '%s -h' for more information.\n" "${me}"
+      exit 0
+    fi
   fi
-fi
-
-
-# Grouping priorities
-if [ "${grp}" == 9 ];
-then
-  # if 'grp' is not set explicitly by -G, then set it to 0 (grouping by filenames) only if -c has been used for custom arguments,
-  # or else set it to 1 (grouping by extensions)
-  [ "${f}" != 0 ] && grp=0 || grp=1
-fi
-
-
-LC_ALL=C eval "find . ${bundle}" | gawk -v custom="${f}" -v grp="${grp}" -v desc="${desc}" -v color="${color}" -v maxd="${maxd}" -v maxf="${maxf}" -v maxt="${maxt}" -v 'RS=\0' -v OFS='\t' '
-  BEGIN {
-    if (color != 0) {
-      orange="\033[38;5;220m"
-      yellow="\033[38;5;222m"
-      lightblue="\033[38;5;10m"
-      lightgrey="\033[38;5;249m"
-      nc="\033[0m"
-    } else {
-      orange=""
-      yellow=""
-      lightblue=""
-      nc=""
-    }
-  }
-    function human(x, c) {
-      if (x<1000) {return sprintf ("%5.0g",x) "·B"} else {x/=1024}
-      s="KMGTEPZY";
-      while (x>=1000 && length(s)>1)
-          {x/=1024; s=substr(s,2)}
-      if (color == 0) {
-        return sprintf("%5.4g",x+0.5) substr(s,1,1) "B"
-      } else if (c == "dir") {
-        return orange sprintf("%5.4g",x+0.5) nc yellow substr(s,1,1) "B" nc
-      } else if (c == "file") {
-        return lightgrey sprintf("%5.4g",x+0.5) substr(s,1,1) "B" nc
+  
+  # Grouping priorities
+  if [ "${grp}" == 9 ];
+  then
+    # if 'grp' is not set explicitly by -G, then set it to 0 (grouping by filenames) only if -c has been used for custom arguments,
+    # or else set it to 1 (grouping by extensions)
+    [ "${f}" != 0 ] && grp=0 || grp=1
+  fi
+  
+  
+  LC_ALL=C eval "find . ${bundle}" | gawk -v custom="${f}" -v grp="${grp}" -v desc="${desc}" -v color="${color}" -v maxd="${maxd}" -v maxf="${maxf}" -v maxt="${maxt}" -v 'RS=\0' -v OFS='\t' '
+    BEGIN {
+      if (color != 0) {
+        orange="\033[38;5;220m"
+        yellow="\033[38;5;222m"
+        lightblue="\033[38;5;10m"
+        lightgrey="\033[38;5;249m"
+        nc="\033[0m"
       } else {
-        # check your function call: human(x, c)
+        orange=""
+        yellow=""
+        lightblue=""
+        nc=""
       }
     }
-    {
-      if ($0 ~ /^[0-9]+:[0-9]+$/) { inum = $0 } else { {print "[ERROR] Find command has returned an unexpected output. Please consult the manual: https://github.com/madjoe/wii" > "/dev/stderr"} { exit 1 } }
-      getline du
-      if (du !~ /^[0-9]+$/) { {print "[ERROR] Find command has returned an unexpected output. Please consult the manual: https://github.com/madjoe/wii" > "/dev/stderr"} { exit 1 } }
-      getline dir
-      getline file
-      if (grp == 0) {
-        # entire filename becomes ext
-        pos=0
-        ext=file
-      } else {
-        # parse only the file extension
-        pos=match(file, "\\.[^\\/\\\\:\\.]+$")
-      }
-      if(pos != 0) {
-        ext=substr(file,pos+1)
-      }
-    }
-    ! seen[inum]++ {
-      gsub(/\\/, "&&", dir)
-      gsub(/\n/, "\\n", dir)
-      total += du
-      sum[dir] += du
-      if (grp == 0) {
-        cnt[dir][ext] = du
-      } else {
-        cnt[dir][ext]++
-      }
-      if (grp == 0) {
-        extensions[ext] += du
-        num[ext]++
-      } else {
-        extensions[ext]++
-      }
-    }
-  END {
-    n = 0
-    PROCINFO["sorted_in"] = "@val_num_desc"
-    for (dir in sum) {
-      m = 0
-      if (n++ >= maxd) break
-      printf "%s[%s%s]%s %s%s%s\n", yellow, human(sum[dir] * 512, "dir"), yellow, nc, lightblue, gensub(/^\.\//, "", "g", dir), nc
-      for (ext in cnt[dir]) {
-        if (m++ >= maxf) break
-        if (grp == 0) {
-          summary_size = human(cnt[dir][ext] * 512, "file")
-          printf "  %s %s\n", summary_size, ext
+      function human(x, c) {
+        if (x<1000) {return sprintf ("%5.0g",x) "·B"} else {x/=1024}
+        s="KMGTEPZY";
+        while (x>=1000 && length(s)>1)
+            {x/=1024; s=substr(s,2)}
+        if (color == 0) {
+          return sprintf("%5.4g",x+0.5) substr(s,1,1) "B"
+        } else if (c == "dir") {
+          return orange sprintf("%5.4g",x+0.5) nc yellow substr(s,1,1) "B" nc
+        } else if (c == "file") {
+          return lightgrey sprintf("%5.4g",x+0.5) substr(s,1,1) "B" nc
         } else {
-          printf "%s%9g%s %s\n", lightgrey, cnt[dir][ext], nc, ext
+          # check your function call: human(x, c)
         }
       }
-    }
-    if (total > 0 && length(sum) > 1) {
+      {
+        if ($0 ~ /^[0-9]+:[0-9]+$/) { inum = $0 } else { {print "[ERROR] Find command has returned an unexpected output. Please consult the manual: https://github.com/madjoe/wii" > "/dev/stderr"} { exit 1 } }
+        getline du
+        if (du !~ /^[0-9]+$/) { {print "[ERROR] Find command has returned an unexpected output. Please consult the manual: https://github.com/madjoe/wii" > "/dev/stderr"} { exit 1 } }
+        getline dir
+        getline file
+        if (grp == 0) {
+          # entire filename becomes ext
+          pos=0
+          ext=file
+        } else {
+          # parse only the file extension
+          pos=match(file, "\\.[^\\/\\\\:\\.]+$")
+        }
+        if(pos != 0) {
+          ext=substr(file,pos+1)
+        }
+      }
+      ! seen[inum]++ {
+        gsub(/\\/, "&&", dir)
+        gsub(/\n/, "\\n", dir)
+        total += du
+        sum[dir] += du
+        if (grp == 0) {
+          cnt[dir][ext] = du
+        } else {
+          cnt[dir][ext]++
+        }
+        if (grp == 0) {
+          extensions[ext] += du
+          num[ext]++
+        } else {
+          extensions[ext]++
+        }
+      }
+    END {
       n = 0
-      print "———————————————"
-      printf "%s[%s%s] total%s\n", yellow, human(total * 512, "dir"), yellow, nc
-      for (ext in extensions) {
-        if (n++ >= maxt) break
-        if (grp == 0) {
-          summary_size = human(extensions[ext] * 512, "file")
-          printf "  %s %s %s(%s)%s\n", summary_size, ext, yellow, num[ext], nc
-        } else {
-          printf "%s%9g%s %s\n", lightgrey, extensions[ext], nc, ext
+      PROCINFO["sorted_in"] = "@val_num_desc"
+      for (dir in sum) {
+        m = 0
+        if (n++ >= maxd) break
+        printf "%s[%s%s]%s %s%s%s\n", yellow, human(sum[dir] * 512, "dir"), yellow, nc, lightblue, gensub(/^\.\//, "", "g", dir), nc
+        for (ext in cnt[dir]) {
+          if (m++ >= maxf) break
+          if (grp == 0) {
+            summary_size = human(cnt[dir][ext] * 512, "file")
+            printf "  %s %s\n", summary_size, ext
+          } else {
+            printf "%s%9g%s %s\n", lightgrey, cnt[dir][ext], nc, ext
+          }
         }
       }
-    } else if (total > 0 && length(sum) == 1) {
-    } else {
-      printf "%sNo%s files found.%s\n", orange, desc, nc
-    }
-  }'
+      if (total > 0 && length(sum) > 1) {
+        n = 0
+        print "———————————————"
+        printf "%s[%s%s] total%s\n", yellow, human(total * 512, "dir"), yellow, nc
+        for (ext in extensions) {
+          if (n++ >= maxt) break
+          if (grp == 0) {
+            summary_size = human(extensions[ext] * 512, "file")
+            printf "  %s %s %s(%s)%s\n", summary_size, ext, yellow, num[ext], nc
+          } else {
+            printf "%s%9g%s %s\n", lightgrey, extensions[ext], nc, ext
+          }
+        }
+      } else if (total > 0 && length(sum) == 1) {
+      } else {
+        printf "%sNo%s files found.%s\n", orange, desc, nc
+      }
+    }'
 
   end=$(date +%s)
   runtime=$((end-start))
