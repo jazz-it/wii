@@ -2,6 +2,214 @@
 # What's In It? by Jazz v2.2.0
 # Prints a short summary of the content of any directory by listing extensions and the number of files for each type found
 
+
+# Allowed arguments for a regular operation
+_wii_construct() {
+
+  local OPTIND  # allowing to call getopts more than once
+
+  while getopts 'hac:C:D:F:G:S:T:defiprvx:' flag; do
+    case "${flag}" in
+      h) # help
+         echo "What's In It? wii v2.2.0 by Jazz"
+         echo
+         echo "Usage:"
+         echo "======"
+         echo "wii [-h] [-a|d|e|f|i|p|r|v] [-c \"<arguments for 'find'>\"] [-C|D|F|G|S|T <variables>] [-x \"<custom extension(s)>\"]"
+         echo
+         echo "Examples:"
+         echo "========="
+         echo "wii has 3 different modes of operation which should be used separately:"
+         echo
+         echo "1) Predefined extensions:"
+         echo "\$ wii -av"
+         echo "-a: audio    (mp3 flac m4a mpa aif ogg wav wma dsd dsf dff)"
+         echo "-d: document (doc docx xls xlsx rtf ppt pptx pps pdf csv mdb ods odp odt txt)"
+         echo "-e: ebook    (epub mobi azw azw3 iba pdf lrs lrf lrx fb2 djvu lit rft)"
+         echo "-f: font     (ttf otf fon fnt)"
+         echo "-i: image    (jpg jpeg png gif bmp tif tiff svg ai webp)"
+         echo "-p: coding   (php py c cs cpp css htm html java js theme module inc pl sh)"
+         echo "-r: archive  (7z rar zip arj deb tar gz z iso)"
+         echo "-v: video    (mp4 mov mpg mpeg mkv m4v avi 3gp 3g2 h264 wmv vob)"
+         echo
+         echo "2) Custom extensions:"
+         echo "\$ wii -x \"bkp log tmp dmp py~\""
+         echo
+         echo "3) Advanced mode:"
+         echo "\$ wii -c \"\\( -type f -mtime -7 -printf 'wii' \\) -a \\( -type f -name '*.log' -printf 'wii' \\)\""
+         echo "\$ wii -c \"\\( -type f -iname '*.pdf' -printf 'wii' \\) -o \\( -type f -iname '*.odt' -printf 'wii' \\)\""
+         echo "\$ wii -c \"-type f -iname '*.txt'\""
+         echo "Parameter of the -c flag will be passed to find directly with a single exception only:"
+         echo "in multiple conditions as per above examples, you should use -printf 'wii'"
+         echo
+         echo "Altering defaults:"
+         echo "-C: <integer>: 0 = no colors, 1 = use colors, default: 1"
+         echo "-G: <integer>: 0 = group by filenames, 1 = group by extensions, default: 1"
+         echo "-D: <integer>: maximum number of directories listed, default: 50"
+         echo "-F: <integer>: maximum number of files listed per each directory, default: 50"
+         echo "-T: <integer>: maximum number of files listed in total summary, default: 50"
+         echo "-S: <integer>: 0 = don't use spinner, 1 = use spinner, default: 1"
+         exit 0
+         ;;
+  
+      C) continue ;; # colors: 0 = no colors; 1 = use colors (default: already set in wii())
+  
+      S) continue ;; # using spinner (default: already set in wii())
+  
+      G) # group results by extension: 0 = no; 1 = yes (default: 1)
+         # 0 = group search results by full filenames
+         if [[ "${OPTARG}" =~ $re ]]; then
+           grp="${OPTARG}"
+         else
+           echo "Invalid parameter set for -G (must be an integer value)."
+           exit 0
+         fi
+         ;;
+  
+      T) # altering defaults for showing total files summary (default: 50)
+         if [[ "${OPTARG}" =~ $re ]]; then
+           maxt="${OPTARG}"
+         else
+           echo "Invalid parameter set for -T (must be an integer value)."
+           exit 0
+         fi
+         ;;
+  
+      a) # predefined extensions: audio
+         desc_element=" audio"
+         bundle_element="mp3 flac m4a mpa aif ogg wav wma dsd dsf dff"
+         [ -z "${desc}" ] && desc="${desc_element}" || desc="${desc} /${desc_element}"
+         [ -z "${bundle_p}" ] && bundle_p="${bundle_element}" || bundle_p="${bundle_p} ${bundle_element}"
+         p=1
+         ;;
+  
+      c)
+         if [ ! -z "${OPTARG}" ]; then
+           desc_element=""
+           flags_element="${OPTARG}"
+           flags_element=$(printf "%s" "${flags_element}" | sed 's/-printf \+["'\''"]\+[^"'\'']\+["'\'']\+/-printf '\''%D:%i\\0%b\\0%h\\0%f\\0'\''/g')
+           if [[ "$flags_element" != *"printf"* ]]; then
+             flags_element="${flags_element} -printf '%D:%i\0%b\0%h\0%f\0'"
+           fi
+           flags="${flags_element[@]}"
+           f=1
+         else
+           echo "No custom search parameter specified."
+           exit 1
+         fi
+         ;;
+  
+      D) # max. number of directories (default: 50)
+         if [[ "${OPTARG}" =~ $re ]]; then
+           maxd="${OPTARG}"
+         else
+           echo "Invalid parameter set for -D (must be an integer value)."
+           exit 0
+         fi
+         ;;
+  
+      F) # max. number of files (default: 50)
+         if [[ "${OPTARG}" =~ $re ]]; then
+           maxf="${OPTARG}"
+         else
+           echo "Invalid parameter set for -F (must be an integer value)."
+           exit 0
+         fi
+         ;;
+  
+      d) # predefined extensions: document
+         desc_element=" document"
+         bundle_element="doc docx xls xlsx rtf ppt pptx pps pdf csv mdb ods odp odt txt"
+         [ -z "${desc}" ] && desc="${desc_element}" || desc="${desc} /${desc_element}"
+         [ -z "${bundle_p}" ] && bundle_p="${bundle_element}" || bundle_p="${bundle_p} ${bundle_element}"
+         p=1
+         ;;
+  
+      e) # predefined extensions: ebook
+         desc_element=" ebook"
+         bundle_element="epub mobi azw azw3 iba pdf lrs lrf lrx fb2 djvu lit rft"
+         [ -z "${desc}" ] && desc="${desc_element}" || desc="${desc} /${desc_element}"
+         [ -z "${bundle_p}" ] && bundle_p="${bundle_element}" || bundle_p="${bundle_p} ${bundle_element}"
+         p=1
+         ;;
+  
+      f) # predefined extensions: font
+         desc_element=" font"
+         bundle_element="ttf otf fon fnt"
+         [ -z "${desc}" ] && desc="${desc_element}" || desc="${desc} /${desc_element}"
+         [ -z "${bundle_p}" ] && bundle_p="${bundle_element}" || bundle_p="${bundle_p} ${bundle_element}"
+         p=1
+         ;;
+  
+      i) # predefined extensions: image
+         desc_element=" image"
+         bundle_element="jpg jpeg png gif bmp tif tiff svg ai webp"
+         [ -z "${desc}" ] && desc="${desc_element}" || desc="${desc} /${desc_element}"
+         [ -z "${bundle_p}" ] && bundle_p="${bundle_element}" || bundle_p="${bundle_p} ${bundle_element}"
+         p=1
+         ;;
+  
+      p) # predefined extensions: programming
+         desc_element=" programming"
+         bundle_element="php py c cs cpp css htm html java js theme module inc pl sh"
+         [ -z "${desc}" ] && desc="${desc_element}" || desc="${desc} /${desc_element}"
+         [ -z "${bundle_p}" ] && bundle_p="${bundle_element}" || bundle_p="${bundle_p} ${bundle_element}"
+         p=1
+         ;;
+  
+      r) # predefined extensions: archive
+         desc_element=" archive"
+         bundle_element="7z rar zip arj deb tar gz z iso"
+         [ -z "${desc}" ] && desc="${desc_element}" || desc="${desc} /${desc_element}"
+         [ -z "${bundle_p}" ] && bundle_p="${bundle_element}" || bundle_p="${bundle_p} ${bundle_element}"
+         p=1
+         ;;
+  
+      v) # predefined extensions: video
+         desc_element=" video"
+         bundle_element="mp4 mov mpg mpeg mkv m4v avi 3gp 3g2 h264 wmv vob"
+         [ -z "${desc}" ] && desc="${desc_element}" || desc="${desc} /${desc_element}"
+         [ -z "${bundle_p}" ] && bundle_p="${bundle_element}" || bundle_p="${bundle_p} ${bundle_element}"
+         p=1
+         ;;
+  
+      x) # custom extensions
+         desc_element=""
+         bundle_e="$(echo ${OPTARG}) | xargs"
+         e=1
+         ;;
+  
+      *) 
+         break
+         ;;
+    esac
+  done
+}
+
+_wii_sanitize_piping() {
+  while IFS= read -r -d $'\n' line; do
+    local s=0
+    while IFS= read -r -d $" " item; do
+      [[ ! -z "${item}" ]] && [[ "$item" =~ ^[0-9]+:[0-9]+$ ]] && $((s+=1)) && printf "[SUCCESS] %s\n" "${item}"     # drive:file
+      read item
+      [[ ! -z "${item}" ]] && [[ "$item" =~ ^[0-9]+$ ]] && $((s+=1)) && printf "[SUCCESS] %s\n" "${item}"             # disk usage
+      read item
+      [[ ! -z "${item}" ]] && [[ "$item" =~ ^\.(\/[^\/]+[\/]?)*$ ]] && $((s+=1)) && echo "Path!" # path
+      read item
+      [[ ! -z "${item}" ]] && [[ "$item" =~ ^[^\/]+$ ]] && $((s+=1)) && echo "Filename!"             # filename
+      if [ "${s}" -gt 0 ] && [ "${s}" -lt 4 ]
+      then
+        echo "${s}"
+        echo "[ERROR 1] Unexpected input format. Please consult the manual: https://github.com/madjoe/wii"
+        exit 1
+      else
+        return "${s}"
+      fi
+    done <<<"${line}"
+  done <<<"${@}"
+  return "${s}"
+}
+
 # helper function for _wii_core(): constructing crucial parts of find command
 _wii_set_bundle() {
   if [ ! -z "${1}" ]
@@ -12,208 +220,30 @@ _wii_set_bundle() {
 
 # Core function
 _wii_core() {
-local OPTIND                 # allowing to call getopts more than once
-local bundle_element=""      # parameter element for `find`
-local bundle_p=""            # parameter for `find` constructed with predefined extensions
-local bundle_e=""            # parameter for `find` constructed with custom extensions
-local p=0                    # predefined extensions detector
-local e=0                    # custom extensions detector
-local f=0                    # custom attributes for `find` detector
-local s="${1:-0}"            # parameters
-local grp=9                  # grouping results: 0 = by filename, 1 = by extension, 9 = not set yet
-local desc=""                # description of predefined extensions
-local desc_element=""        # description element of predefined extensions
-local help=0                 # counter of matching directories that contain the queried file type(s)
-local start=$(date +%s)      # start measuring elapsed time
-local maxf=50                # default limitation for displaying maximum files per each directory
-local maxd=50                # default limitation for displaying maximum directories
-local maxt=50                # default limitation for displaying maximum files per total summary
-bundle=""                    # main generated arguments/flags for `find`
+bundle_element=""      # parameter element for `find`
+bundle_p=""            # parameter for `find` constructed with predefined extensions
+bundle_e=""            # parameter for `find` constructed with custom extensions
+p=0                    # predefined extensions detector
+e=0                    # custom extensions detector
+f=0                    # custom attributes for `find` detector
+# s="${1:-0}"            # parameters
+grp=9                  # grouping results: 0 = by filename, 1 = by extension, 9 = not set yet
+desc=""                # description of predefined extensions
+desc_element=""        # description element of predefined extensions
+start=$(date +%s)      # start measuring elapsed time
+maxf=50                # default limitation for displaying maximum files per each directory
+maxd=50                # default limitation for displaying maximum directories
+maxt=50                # default limitation for displaying maximum files per total summary
+bundle=""              # main generated arguments/flags for `find`
 
 
-while getopts 'hac:C:D:F:G:S:T:defiprvx:' flag; do
-  case "${flag}" in
-    h) # help
-       echo "What's In It? wii v2.2.0 by Jazz"
-       echo
-       echo "Usage:"
-       echo "======"
-       echo "wii [-h] [-a|d|e|f|i|p|r|v] [-c \"<arguments for 'find'>\"] [-C|D|F|G|S|T <variables>] [-x \"<custom extension(s)>\"]"
-       echo
-       echo "Examples:"
-       echo "========="
-       echo "wii has 3 different modes of operation which should be used separately:"
-       echo
-       echo "1) Predefined extensions:"
-       echo "\$ wii -av"
-       echo "-a: audio    (mp3 flac m4a mpa aif ogg wav wma dsd dsf dff)"
-       echo "-d: document (doc docx xls xlsx rtf ppt pptx pps pdf csv mdb ods odp odt txt)"
-       echo "-e: ebook    (epub mobi azw azw3 iba pdf lrs lrf lrx fb2 djvu lit rft)"
-       echo "-f: font     (ttf otf fon fnt)"
-       echo "-i: image    (jpg jpeg png gif bmp tif tiff svg ai webp)"
-       echo "-p: coding   (php py c cs cpp css htm html java js theme module inc pl sh)"
-       echo "-r: archive  (7z rar zip arj deb tar gz z iso)"
-       echo "-v: video    (mp4 mov mpg mpeg mkv m4v avi 3gp 3g2 h264 wmv vob)"
-       echo
-       echo "2) Custom extensions:"
-       echo "\$ wii -x \"bkp log tmp dmp py~\""
-       echo
-       echo "3) Advanced mode:"
-       echo "\$ wii -c \"\\( -type f -mtime -7 -printf 'wii' \\) -a \\( -type f -name '*.log' -printf 'wii' \\)\""
-       echo "\$ wii -c \"\\( -type f -iname '*.pdf' -printf 'wii' \\) -o \\( -type f -iname '*.odt' -printf 'wii' \\)\""
-       echo "\$ wii -c \"-type f -iname '*.txt'\""
-       echo "Parameter of the -c flag will be passed to find directly with a single exception only:"
-       echo "in multiple conditions as per above examples, you should use -printf 'wii'"
-       echo
-       echo "Altering defaults:"
-       echo "-C: integer: 0 = no colors, 1 = use colors, default: 1"
-       echo "-G: integer: 0 = group by filenames, 1 = group by extensions, default: 1"
-       echo "-D: integer: maximum number of directories listed, default: 50"
-       echo "-F: integer: maximum number of files listed per each directory, default: 50"
-       echo "-T: integer: maximum number of files listed in total summary, default: 50"
-       echo "-S: integer: 0 = don't use spinner, 1 = use spinner, default: 1"
-       exit 0
-       ;;
-
-    C) continue ;; # colors: 0 = no colors; 1 = use colors (default: already set in wii())
-
-    S) continue ;; # using spinner (default: already set in wii())
-
-    G) # group results by extension: 0 = no; 1 = yes (default: 1)
-       # 0 = group search results by full filenames
-       if [[ "${OPTARG}" =~ $re ]]; then
-         grp="${OPTARG}"
-       else
-         echo "Invalid parameter set for -G (must be an integer value)."
-         exit 0
-       fi
-       ;;
-
-    T) # altering defaults for showing total files summary (default: 50)
-       if [[ "${OPTARG}" =~ $re ]]; then
-         maxt="${OPTARG}"
-       else
-         echo "Invalid parameter set for -T (must be an integer value)."
-         exit 0
-       fi
-       ;;
-
-    a) # predefined extensions: audio
-       desc_element=" audio"
-       bundle_element="mp3 flac m4a mpa aif ogg wav wma dsd dsf dff"
-       [ -z "${desc}" ] && desc="${desc_element}" || desc="${desc} /${desc_element}"
-       [ -z "${bundle_p}" ] && bundle_p="${bundle_element}" || bundle_p="${bundle_p} ${bundle_element}"
-       p=1
-       ;;
-
-    c)
-       if [ ! -z "${OPTARG}" ]; then
-         desc_element=""
-         flags_element="${OPTARG}"
-         flags_element=$(printf "%s" "${flags_element}" | sed 's/-printf \+["'\''"]\+[^"'\'']\+["'\'']\+/-printf '\''%D:%i\\0%b\\0%h\\0%f\\0'\''/g')
-         if [[ "$flags_element" != *"printf"* ]]; then
-           flags_element="${flags_element} -printf '%D:%i\0%b\0%h\0%f\0'"
-         fi
-         flags="${flags_element[@]}"
-         f=1
-       else
-         echo "No custom search parameter specified."
-         exit 1
-       fi
-       ;;
-
-    D) # max. number of directories (default: 50)
-       if [[ "${OPTARG}" =~ $re ]]; then
-         maxd="${OPTARG}"
-       else
-         echo "Invalid parameter set for -D (must be an integer value)."
-         exit 0
-       fi
-       ;;
-
-    F) # max. number of files (default: 50)
-       if [[ "${OPTARG}" =~ $re ]]; then
-         maxf="${OPTARG}"
-       else
-         echo "Invalid parameter set for -F (must be an integer value)."
-         exit 0
-       fi
-       ;;
-
-    d) # predefined extensions: document
-       desc_element=" document"
-       bundle_element="doc docx xls xlsx rtf ppt pptx pps pdf csv mdb ods odp odt txt"
-       [ -z "${desc}" ] && desc="${desc_element}" || desc="${desc} /${desc_element}"
-       [ -z "${bundle_p}" ] && bundle_p="${bundle_element}" || bundle_p="${bundle_p} ${bundle_element}"
-       p=1
-       ;;
-
-    e) # predefined extensions: ebook
-       desc_element=" ebook"
-       bundle_element="epub mobi azw azw3 iba pdf lrs lrf lrx fb2 djvu lit rft"
-       [ -z "${desc}" ] && desc="${desc_element}" || desc="${desc} /${desc_element}"
-       [ -z "${bundle_p}" ] && bundle_p="${bundle_element}" || bundle_p="${bundle_p} ${bundle_element}"
-       p=1
-       ;;
-
-    f) # predefined extensions: font
-       desc_element=" font"
-       bundle_element="ttf otf fon fnt"
-       [ -z "${desc}" ] && desc="${desc_element}" || desc="${desc} /${desc_element}"
-       [ -z "${bundle_p}" ] && bundle_p="${bundle_element}" || bundle_p="${bundle_p} ${bundle_element}"
-       p=1
-       ;;
-
-    i) # predefined extensions: image
-       desc_element=" image"
-       bundle_element="jpg jpeg png gif bmp tif tiff svg ai webp"
-       [ -z "${desc}" ] && desc="${desc_element}" || desc="${desc} /${desc_element}"
-       [ -z "${bundle_p}" ] && bundle_p="${bundle_element}" || bundle_p="${bundle_p} ${bundle_element}"
-       p=1
-       ;;
-
-    p) # predefined extensions: programming
-       desc_element=" programming"
-       bundle_element="php py c cs cpp css htm html java js theme module inc pl sh"
-       [ -z "${desc}" ] && desc="${desc_element}" || desc="${desc} /${desc_element}"
-       [ -z "${bundle_p}" ] && bundle_p="${bundle_element}" || bundle_p="${bundle_p} ${bundle_element}"
-       p=1
-       ;;
-
-    r) # predefined extensions: archive
-       desc_element=" archive"
-       bundle_element="7z rar zip arj deb tar gz z iso"
-       [ -z "${desc}" ] && desc="${desc_element}" || desc="${desc} /${desc_element}"
-       [ -z "${bundle_p}" ] && bundle_p="${bundle_element}" || bundle_p="${bundle_p} ${bundle_element}"
-       p=1
-       ;;
-
-    v) # predefined extensions: video
-       desc_element=" video"
-       bundle_element="mp4 mov mpg mpeg mkv m4v avi 3gp 3g2 h264 wmv vob"
-       [ -z "${desc}" ] && desc="${desc_element}" || desc="${desc} /${desc_element}"
-       [ -z "${bundle_p}" ] && bundle_p="${bundle_element}" || bundle_p="${bundle_p} ${bundle_element}"
-       p=1
-       ;;
-
-    x) # custom extensions
-       desc_element=""
-       bundle_e="$(echo ${OPTARG}) | xargs"
-       e=1
-       ;;
-
-    *) 
-       break
-       ;;
-  esac
-done
+_wii_construct "$@"
 
 
 # Setting priorities for predefined extensions (p-LOW), custom extensions (e-MEDIUM) and/or custom arguments (f-HIGH)
-
-# default behaviour if no parameters are passed
-if [ "${s}" == 0 ];
+if [ $((f+e+p)) == 0 ];
 then
+  # default behaviour if no parameters are passed
   desc_element=""
   bundle="\\( -type f -iname \"*.*\" -printf '%D:%i\0%b\0%h\0%f\0' \\)"
 else
@@ -232,14 +262,13 @@ else
   else
     # if nothing is set properly from above, we need to throw an error
     printf "%s: invalid option -- '%s'\n" "${me}" "${bundle_e}"
-    printf "Try '%s --help' for more information.\n" "${me}"
+    printf "Try '%s -h' for more information.\n" "${me}"
     exit 0
   fi
 fi
 
 
-# Grouping files logic
-
+# Grouping priorities
 if [ "${grp}" == 9 ];
 then
   # if 'grp' is not set explicitly by -G, then set it to 0 (grouping by filenames) only if -c has been used for custom arguments,
@@ -250,26 +279,20 @@ fi
 
 LC_ALL=C eval "find . ${bundle}" | gawk -v custom="${f}" -v grp="${grp}" -v desc="${desc}" -v color="${color}" -v maxd="${maxd}" -v maxf="${maxf}" -v maxt="${maxt}" -v 'RS=\0' -v OFS='\t' '
   BEGIN {
-    if ( color == 0) {
-      f_nocolor()
-    } else {
-      f_color()
-    }
-  }
-  function f_nocolor() {
-      orange=""
-      yellow=""
-      lightblue=""
-      nc=""
-  }
-  function f_color() {
+    if (color != 0) {
       orange="\033[38;5;220m"
       yellow="\033[38;5;222m"
       lightblue="\033[38;5;10m"
       lightgrey="\033[38;5;249m"
       nc="\033[0m"
+    } else {
+      orange=""
+      yellow=""
+      lightblue=""
+      nc=""
+    }
   }
-  function human(x, c) {
+    function human(x, c) {
       if (x<1000) {return sprintf ("%5.0g",x) "·B"} else {x/=1024}
       s="KMGTEPZY";
       while (x>=1000 && length(s)>1)
@@ -283,41 +306,42 @@ LC_ALL=C eval "find . ${bundle}" | gawk -v custom="${f}" -v grp="${grp}" -v desc
       } else {
         # check your function call: human(x, c)
       }
-  }
-  {
-    inum = $0
-    getline du
-    getline dir
-    getline file
-    if (grp == 0) {
-      # entire filename becomes ext
-      pos=0
-      ext=file
-    } else {
-      # parse only the file extension
-      pos=match(file, "\\.[^\\/\\\\:\\.]+$")
     }
-    if(pos != 0) {
-      ext=substr(file,pos+1)
+    {
+      if ($0 ~ /^[0-9]+:[0-9]+$/) { inum = $0 } else { {print "[ERROR] Find command has returned an unexpected output. Please consult the manual: https://github.com/madjoe/wii" > "/dev/stderr"} { exit 1 } }
+      getline du
+      if (du !~ /^[0-9]+$/) { {print "[ERROR] Find command has returned an unexpected output. Please consult the manual: https://github.com/madjoe/wii" > "/dev/stderr"} { exit 1 } }
+      getline dir
+      getline file
+      if (grp == 0) {
+        # entire filename becomes ext
+        pos=0
+        ext=file
+      } else {
+        # parse only the file extension
+        pos=match(file, "\\.[^\\/\\\\:\\.]+$")
+      }
+      if(pos != 0) {
+        ext=substr(file,pos+1)
+      }
     }
-  }
-  ! seen[inum]++ {
-    gsub(/\\/, "&&", dir)
-    gsub(/\n/, "\\n", dir)
-    total += du
-    sum[dir] += du
-    if (grp == 0) {
-      cnt[dir][ext] = du
-    } else {
-      cnt[dir][ext]++
+    ! seen[inum]++ {
+      gsub(/\\/, "&&", dir)
+      gsub(/\n/, "\\n", dir)
+      total += du
+      sum[dir] += du
+      if (grp == 0) {
+        cnt[dir][ext] = du
+      } else {
+        cnt[dir][ext]++
+      }
+      if (grp == 0) {
+        extensions[ext] += du
+        num[ext]++
+      } else {
+        extensions[ext]++
+      }
     }
-    if (grp == 0) {
-      extensions[ext] += du
-      num[ext]++
-    } else {
-      extensions[ext]++
-    }
-  }
   END {
     n = 0
     PROCINFO["sorted_in"] = "@val_num_desc"
