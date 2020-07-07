@@ -50,9 +50,9 @@ _wii_construct() {
          echo "\$ wii -x \"bkp log tmp dmp py~\""
          echo
          echo "3) Advanced mode:"
-         echo "\$ wii -c \"-type f -iname '*.txt'\""
+         echo "\$ wii -c \"-type f -name '*tmp*'\""
          echo "\$ wii -c \"-type f -mtime -7 -size +1M -name '*.log'\""
-         echo "\$ wii -c \"\\( -type f -iname '*.pdf' -printf 'wii' \\) -o \\( -type f -iname '*.odt' -printf 'wii' \\)\""
+         echo "\$ wii -c \"\\( -type f -size +1M -iname '*.pdf' -printf 'wii' \\) -o \\( -type f -size +1M -iname '*.odt' -printf 'wii' \\)\""
          echo "Parameter of the -c flag will be passed to find directly with a single exception only:"
          echo "in multiple conditions as per above example, you should always use -printf 'wii'"
          echo
