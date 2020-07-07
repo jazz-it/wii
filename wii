@@ -15,9 +15,9 @@ _wii_construct() {
   desc=""                # description of predefined extensions
   desc_element=""        # description element of predefined extensions
   start=$(date +%s)      # start measuring elapsed time
-  maxf=50                # default limitation for displaying maximum files per each directory
-  maxd=50                # default limitation for displaying maximum directories
-  maxt=50                # default limitation for displaying maximum files per total summary
+  maxf=10                # default limitation for displaying maximum files per each directory
+  maxd=20                # default limitation for displaying maximum directories
+  maxt=30                # default limitation for displaying maximum files per total summary
   bundle=""              # main generated arguments/flags for `find`
 
   local OPTIND  # allowing to call getopts more than once
