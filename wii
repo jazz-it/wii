@@ -186,29 +186,6 @@ _wii_construct() {
   done
 }
 
-_wii_sanitize_piping() {
-  while IFS= read -r -d $'\n' line; do
-    local s=0
-    while IFS= read -r -d $" " item; do
-      [[ ! -z "${item}" ]] && [[ "$item" =~ ^[0-9]+:[0-9]+$ ]] && $((s+=1)) && printf "[SUCCESS] %s\n" "${item}"     # drive:file
-      read item
-      [[ ! -z "${item}" ]] && [[ "$item" =~ ^[0-9]+$ ]] && $((s+=1)) && printf "[SUCCESS] %s\n" "${item}"             # disk usage
-      read item
-      [[ ! -z "${item}" ]] && [[ "$item" =~ ^\.(\/[^\/]+[\/]?)*$ ]] && $((s+=1)) && echo "Path!" # path
-      read item
-      [[ ! -z "${item}" ]] && [[ "$item" =~ ^[^\/]+$ ]] && $((s+=1)) && echo "Filename!"             # filename
-      if [ "${s}" -gt 0 ] && [ "${s}" -lt 4 ]
-      then
-        echo "${s}"
-        echo "[ERROR 1] Unexpected input format. Please consult the manual: https://github.com/madjoe/wii"
-        exit 1
-      else
-        return "${s}"
-      fi
-    done <<<"${line}"
-  done <<<"${@}"
-  return "${s}"
-}
 
 # helper function for _wii_core(): constructing crucial parts of find command
 _wii_set_bundle() {
