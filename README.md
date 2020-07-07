@@ -215,7 +215,7 @@ $ [ "$SHELL" = *"bash" ] && echo "[ -d \"\$HOME\"/utils/wii ] && PATH=\"\$HOME/u
 
 --------------
 
-## Be up-to-date with newest version of wii
+## Always be up-to-date with the newest version of `wii`
 ```
 $ cd "$HOME"/utils/wii && git pull origin master
 $ [ "$SHELL" = *"zsh" ] && echo "$OK" && source "$HOME"/.zshrc
