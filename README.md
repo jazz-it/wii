@@ -46,7 +46,7 @@ $ wii -c "-type f -iname '*.txt'"
 $ wii -c "-type f -mtime -7 -size +2M -name '*log*'"
 $ wii -c "\( -type f -iname '*.pdf' -printf 'wii' \) -o \( -type f -iname '*.doc*' -printf 'wii' \)"
 ```
-> **Important**: Parameter of the `-c` flag will be passed to `find` with a few modifications:\ 
+> **Important**: Parameter of the `-c` flag will be passed to `find` with a few modifications:\
 > in multiple conditions as per above example, you should use `-printf 'wii'` for each multi-condition.\
 > The parameter for `-c` flag should contain almost everything that you would normally put into `<arguments>` as per 
 > `find <path> <arguments>`. However, it's crucial to know that **`wii` requires an exact format of an output 
