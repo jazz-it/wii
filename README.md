@@ -223,7 +223,7 @@ $ [ "$SHELL" = *"bash" ] && echo "$OK" && source "$HOME"/.bashrc
 
 ```
 
-## How do I uninstall wii?
+## How do I uninstall `wii`?
 
 ```
 $ rm -rf "$HOME"/utils/wii
