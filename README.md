@@ -42,12 +42,17 @@ $ wii -x "bkp log tmp dmp py~"
 
 ### 3) Advanced mode:
 ```
-$ wii -c "\( -type f -mtime -7 -printf 'wii' \) -o \( -type f -name 'log.txt' -printf 'wii' \)"
-$ wii -c "\( -type f -iname '*.pdf' -printf 'wii' \) -o \( -type f -iname '*.doc*' -printf 'wii' \)"
 $ wii -c "-type f -iname '*.txt'"
+$ wii -c "-type f -mtime -7 -size +2M -name '*log*'"
+$ wii -c "\( -type f -iname '*.pdf' -printf 'wii' \) -o \( -type f -iname '*.doc*' -printf 'wii' \)"
 ```
-> Important: Parameter of the -c flag will be passed to find directly with a single exception only: 
-> in multiple conditions as per above examples, you should use -printf 'wii' for each condition.
+> **Important**: Parameter of the -c flag will be passed to find directly with a single exception only: 
+> in multiple conditions as per above examples, you should use -printf 'wii' for each condition.\
+> Parameter for `-c` should contain almost everything that you would normally put into `<arguments>` as per 
+> `find <path> <arguments>`. However, it's crucial to know that **`wii` requires an exact format of an output 
+> from `find`**. At first, it will try to replace automatically all existing occurrences of `-printf 'something'` 
+> with the appropriate format. Then it will search for all `printf` and if it doesn't find any, `wii` will 
+> append the required `-printf` to the very end of the parameter.
 
 In case you try to mix the modes from above, 'wii' will apply the following rule in group to prioritize it:
  - HIGH: Advanced mode
@@ -165,6 +170,11 @@ $ wii -D 5 -F 3 -T 4 -c "-type f -mtime -7 -iname '*log*'"
 > Note '-G 0' was not set explicitly, but it will be the default for advanced mode of operation (-c), unless we set it to '-G 1'.
 
 
+## Dependencies:
+
+[gawk](https://opensource.com/article/18/8/how-install-software-linux-command-line) - you need to have it installed prior proceeding with installation of wii
+
+
 ## Installation:
 
  1. **Clone with GIT**
@@ -198,9 +208,17 @@ $ [ "$SHELL" = *"zsh" ] && echo "[ -d \"\$HOME\"/utils/wii ] && export PATH=\"\$
 $ [ "$SHELL" = *"bash" ] && echo "[ -d \"\$HOME\"/utils/wii ] && PATH=\"\$HOME/utils/wii:\$PATH\"" >> "$HOME"/.bashrc && echo "$OK" && source "$HOME"/.bashrc || echo "$NOBASH"
 ```
 > If one of the last two commands returned "Installation complete!" then you have 
-> successfully installed the script and you may start using it. Try: `cd && wii -d`
+> successfully installed the script and you may start using it. Try: `cd && wii`
 
 --------------
+
+## Be up-to-date with newest version of wii
+```
+$ cd "$HOME"/utils/wii && git pull origin master
+$ [ "$SHELL" = *"zsh" ] && echo "$OK" && source "$HOME"/.zshrc
+$ [ "$SHELL" = *"bash" ] && echo "$OK" && source "$HOME"/.bashrc
+
+```
 
 ## How do I uninstall wii?
 
