@@ -46,13 +46,16 @@ $ wii -c "-type f -iname '*.txt'"
 $ wii -c "-type f -mtime -7 -size +2M -name '*log*'"
 $ wii -c "\( -type f -iname '*.pdf' -printf 'wii' \) -o \( -type f -iname '*.doc*' -printf 'wii' \)"
 ```
-> **Important**: Parameter of the -c flag will be passed to find directly with a single exception only: 
-> in multiple conditions as per above examples, you should use -printf 'wii' for each condition.\
-> Parameter for `-c` should contain almost everything that you would normally put into `<arguments>` as per 
+> **Important**: Parameter of the `-c` flag will be passed to find directly with a few modifications: 
+> in multiple conditions as per above example, you should use `-printf 'wii'` for each multi-condition.\
+> The parameter for `-c` flag should contain almost everything that you would normally put into `<arguments>` as per 
 > `find <path> <arguments>`. However, it's crucial to know that **`wii` requires an exact format of an output 
 > from `find`**. At first, it will try to replace automatically all existing occurrences of `-printf 'something'` 
 > with the appropriate format. Then it will search for all `printf` and if it doesn't find any, `wii` will 
 > append the required `-printf` to the very end of the parameter.
+
+[find](https://man7.org/linux/man-pages/man1/find.1.html) - check the syntax of `find` and apply the important notes from above accordingly
+
 
 In case you try to mix the modes from above, 'wii' will apply the following rule in group to prioritize it:
  - HIGH: Advanced mode
