@@ -54,7 +54,7 @@ $ wii -c "\( -type f -iname '*.pdf' -printf 'wii' \) -o \( -type f -iname '*.doc
 > with the appropriate format. Then it will search for all `printf` and if it doesn't find any, `wii` will 
 > append the required `-printf` to the very end of the parameter.
 
-[find](https://man7.org/linux/man-pages/man1/find.1.html) - check the syntax of `find` and apply the important notes from above accordingly
+[**find**](https://man7.org/linux/man-pages/man1/find.1.html) - check the syntax of `find` and apply the important notes from above accordingly
 
 
 In case you try to mix the modes from above, 'wii' will apply the following rule in group to prioritize it:
@@ -175,7 +175,7 @@ $ wii -D 5 -F 3 -T 4 -c "-type f -mtime -7 -iname '*log*'"
 
 ## Dependencies:
 
-[gawk](https://opensource.com/article/18/8/how-install-software-linux-command-line) - you need to have it installed prior proceeding with installation of wii
+[**gawk**](https://opensource.com/article/18/8/how-install-software-linux-command-line) - you need to have it installed prior proceeding with installation of wii
 
 
 ## Installation:
