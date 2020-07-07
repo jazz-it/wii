@@ -1,7 +1,7 @@
 # wii
 **What's In It?**
 
-Prints a short summary of specific content types recursively by listing corresponding disk usage for each directory. The script will order results by size in reverse. If you run the script without any arguments and if many directories  are found, the output will be truncated to top 50 largest directories (by default).
+Prints a short summary of specific content types recursively by listing corresponding disk usage for each directory. The script will order results by size in reverse. If you run the script without any arguments and if many directories are found, the output will be truncated to top 20 largest directories (by default).
 
 > This project may be used as a demonstration for `du` project as a usecase for a new `--include` parameter. 
 > Users would be able to measure disk usage of specific file types, which is currently not supported.
@@ -186,7 +186,7 @@ $ mkdir "$HOME"/utils
 $ cd "$HOME"/utils
 $ git clone https://github.com/madjoe/wii.git
 ```
-> Continue with step 3.
+> If successful, skip the next step and continue with step 3.
 
 --------------
 
