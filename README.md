@@ -19,7 +19,7 @@ wii [-h]                             # help
 ***wii has 3 different modes of operation which should be used independently:***
 We use the optional `-F2 -D3 -T3` flags just for purposes of the demo below (to make results entirely visible on screen).\
 It overrides the defaults: `-F10 -D20 -T30`.\
-`F`=Files, `D`=Directories, `T`=Total files. See [altering defaults](#altering-defaults-optional).
+`F`=Files, `D`=Directories, `T`=Total files. See [Altering defaults](#altering-defaults-optional).
 
 ## Demo:
 
