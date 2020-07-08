@@ -67,7 +67,7 @@ In case you accidentally mix the 3 modes of operation from above, `wii` will app
  - `MEDIUM`: Custom extensions
  - `LOW`: Predefined extensions
 
-### Altering defaults:
+### Altering defaults (optional):
 ```
 $ wii -C 0 -D 10 -F 0 -T 5 -S 0 -avd
 ```
