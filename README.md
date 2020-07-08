@@ -18,7 +18,10 @@ wii [-h]                             # help
 
 ***wii has 3 different modes of operation which should be used independently:***
 
+## Demo:
+
 ### 1) Predefined extensions:
+![wii v2.2.x predefined extensions demo](https://media1.giphy.com/media/lOOmNP1azjZREzlp8b/giphy.gif)
 ```
 $ wii -av
 ```
@@ -33,6 +36,7 @@ $ wii -av
 > You may combine the flags e.g. `wii -ie`, for listing all image and ebook files.
 
 ### 2) Custom extensions:
+![wii v2.2.x custom extensions demo](https://media3.giphy.com/media/f5wR72IruPEP9ylJ5i/giphy.gif)
 ```
 $ wii -x "bkp log tmp dmp py~"
 ```
@@ -41,6 +45,7 @@ $ wii -x "bkp log tmp dmp py~"
 > Note: you should avoid using commas, or leading dots in front of each extension.
 
 ### 3) Advanced mode:
+![wii v2.2.x advanced mode demo](https://media2.giphy.com/media/jOyxiOXaKIB8VB31PO/giphy.gif)
 ```
 $ wii -c "-type f -iname '*.txt'"
 $ wii -c "-type f -mtime -7 -size +2M -name '*log*'"
@@ -72,11 +77,6 @@ $ wii -C 0 -D 10 -F 0 -T 5 -S 0 -avd
 > `-F`: integer: maximum number of largest items listed per each directory, `default: 50`\
 > `-T`: integer: maximum number of largest items listed in total summary, `default: 50`\
 > `-S`: integer: `0` = don't use a spinner, `1` = use spinner, `default: 1`
-
-
-## Demo:
-
-![wii v2.2.x demo](https://media3.giphy.com/media/iJyFDDXbsqaKQ6T7qs/giphy.gif)
 
 
 ## Advanced Examples
