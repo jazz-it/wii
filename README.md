@@ -66,12 +66,12 @@ In case you accidentally mix the 3 modes of operation from above, `wii` will app
 ```
 $ wii -C 0 -D 10 -F 0 -T 5 -S 0 -avd
 ```
-> `-C`: <integer>: `0` = no colors, `1` = use colors, `default: 1`\
-> `-G`: <integer>: `0` = group by filenames, `1` = group by extensions, `default: 1`\
-> `-D`: <integer>: maximum number of directories listed, `default: 50`\
-> `-F`: <integer>: maximum number of largest items listed per each directory, `default: 50`\
-> `-T`: <integer>: maximum number of largest items listed in total summary, `default: 50`\
-> `-S`: <integer>: `0` = don't use a spinner, `1` = use spinner, `default: 1`
+> `-C`: integer: `0` = no colors, `1` = use colors, `default: 1`\
+> `-G`: integer: `0` = group by filenames, `1` = group by extensions, `default: 1`\
+> `-D`: integer: maximum number of directories listed, `default: 50`\
+> `-F`: integer: maximum number of largest items listed per each directory, `default: 50`\
+> `-T`: integer: maximum number of largest items listed in total summary, `default: 50`\
+> `-S`: integer: `0` = don't use a spinner, `1` = use spinner, `default: 1`
 
 
 ## Demo:
