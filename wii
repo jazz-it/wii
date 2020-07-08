@@ -29,11 +29,15 @@ _wii_construct() {
          echo
          echo "Usage:"
          echo "======"
-         echo "wii [-h] [-a|d|e|f|i|p|r|v] [-c \"<arguments for 'find'>\"] [-C|D|F|G|S|T <variables>] [-x \"<custom extension(s)>\"]"
+         echo "  wii [-h]                             # help"
+         echo "      [-a|d|e|f|i|p|r|v]               # predefined extensions"
+         echo "      [-x \"<custom extension(s)>\"]     # custom extensions"
+         echo "      [-c \"<argument(s) for 'find'>\"]  # advanced mode"
+         echo "      [-C|D|F|G|S|T <integer value>]   # altering defaults"
          echo
          echo "Examples:"
          echo "========="
-         echo "wii has 3 different modes of operation which should be used separately:"
+         echo "wii has 3 different modes of operation which should be used independently"
          echo
          echo "1) Predefined extensions:"
          echo "\$ wii -av"
@@ -282,9 +286,15 @@ _wii_core() {
         }
       }
       {
-        if ($0 ~ /^[0-9]+:[0-9]+$/) { inum = $0 } else { {print "[ERROR] Find command has returned an unexpected output. Please consult the manual: https://github.com/madjoe/wii" > "/dev/stderr"} { exit 1 } }
-        getline du
-        if (du !~ /^[0-9]+$/) { {print "[ERROR] Find command has returned an unexpected output. Please consult the manual: https://github.com/madjoe/wii" > "/dev/stderr"} { exit 1 } }
+        if (custom != 0) {
+          # Check the input data format from find when in Advanced mode
+          if ($0 ~ /^[0-9]+:[0-9]+$/) { inum = $0 } else { {print "[ERROR] Find command has returned an unexpected output. Please consult the manual: https://github.com/madjoe/wii" > "/dev/stderr"} { exit 1 } }
+          getline du
+          if (du !~ /^[0-9]+$/) { {print "[ERROR] Find command has returned an unexpected output. Please consult the manual: https://github.com/madjoe/wii" > "/dev/stderr"} { exit 1 } }
+        } else {
+          inum = $0
+          getline du
+        }
         getline dir
         getline file
         if (grp == 0) {
