@@ -10,9 +10,9 @@ Prints a short summary of specific content types recursively by listing correspo
 
 ```
 wii [-h]                             # help
-    [-a|d|e|f|i|p|r|v]               # predefined extensions
-    [-x "<custom extension(s)>"]     # custom extensions
-    [-c "<argument(s) for `find`>"]  # advanced mode
+    [-a|d|e|f|i|p|r|v]               # mode 1: predefined extensions
+    [-x "<custom extension(s)>"]     # mode 2: custom extensions
+    [-c "<argument(s) for `find`>"]  # mode 3: advanced mode
     [-C|D|F|G|S|T <integer value>]   # altering defaults
 ```
 
