@@ -1,7 +1,7 @@
 # wii
 **What's In It?**
 
-Prints a short summary of specific content types recursively by listing corresponding disk usage for each directory. The script will order results by size in reverse. If you run the script without any arguments and if many directories are found, the output will be truncated to top 20 largest directories (by default).
+Prints a short summary of specific content types recursively by listing corresponding disk usage per each directory. The script will print results grouped by extensions or by actual file names - ordered by size in reverse order. If you run the script without any arguments and if many directories are found, the output will be truncated to top 20 largest directories (by default), but this could be overriden easily by setting the appropriate parameter.
 
 > This project may be used as a demonstration for `du` project as a usecase for a new `--include` parameter. 
 > Users would be able to measure disk usage of specific file types, which is currently not supported.
@@ -9,28 +9,28 @@ Prints a short summary of specific content types recursively by listing correspo
 ## Usage: 
 
 ```
-wii [-h] 
-    [-a|d|e|f|i|p|r|v] 
-    [-c "<arguments for `find`>"] 
-    [-C|D|F|G|S|T <integer value>] 
-    [-x "<custom extension(s)>"]
+wii [-h]                             # help
+    [-a|d|e|f|i|p|r|v]               # predefined extensions
+    [-x "<custom extension(s)>"]     # custom extensions
+    [-c "<argument(s) for `find`>"]  # advanced mode
+    [-C|D|F|G|S|T <integer value>]   # altering defaults
 ```
 
-***wii has 3 different modes of operation which should be used separately:***
+***wii has 3 different modes of operation which should be used independently:***
 
 ### 1) Predefined extensions:
 ```
 $ wii -av
 ```
-> -a: audio    (mp3 flac m4a mpa aif ogg wav wma dsd dsf dff)\
-> -d: document (doc docx xls xlsx rtf ppt pptx pps pdf csv mdb ods odp odt txt)\
-> -e: ebook    (epub mobi azw azw3 iba pdf lrs lrf lrx fb2 djvu lit rft)\
-> -f: font     (ttf otf fon fnt)\
-> -i: image    (jpg jpeg png gif bmp tif tiff svg ai webp)\
-> -p: coding   (php py c cs cpp css htm html java js theme module inc pl sh)\
-> -r: archive  (7z rar zip arj deb tar gz z iso)\
-> -v: video    (mp4 mov mpg mpeg mkv m4v avi 3gp 3g2 h264 wmv vob)\
-> You may combine the flags e.g. wii -ie, for listing all image and ebook files.
+> `-a`: audio    (`mp3 flac m4a mpa aif ogg wav wma dsd dsf dff`)\
+> `-d`: document (`doc docx xls xlsx rtf ppt pptx pps pdf csv mdb ods odp odt txt`)\
+> `-e`: ebook    (`epub mobi azw azw3 iba pdf lrs lrf lrx fb2 djvu lit rft`)\
+> `-f`: font     (`ttf otf fon fnt`)\
+> `-i`: image    (`jpg jpeg png gif bmp tif tiff svg ai webp`)\
+> `-p`: coding   (`php py c cs cpp css htm html java js theme module inc pl sh`)\
+> `-r`: archive  (`7z rar zip arj deb tar gz z iso`)\
+> `-v`: video    (`mp4 mov mpg mpeg mkv m4v avi 3gp 3g2 h264 wmv vob`)\
+> You may combine the flags e.g. `wii -ie`, for listing all image and ebook files.
 
 ### 2) Custom extensions:
 ```
@@ -57,21 +57,21 @@ $ wii -c "\( -type f -iname '*.pdf' -printf 'wii' \) -o \( -type f -iname '*.doc
 [**find**](https://man7.org/linux/man-pages/man1/find.1.html) - check the syntax of `find` and apply the important notes from above accordingly
 
 
-In case you try to mix the 3 modes from above, `wii` will apply the following priority rule and execute the highest priority only:
- - HIGH: Advanced mode
- - MEDIUM: Custom extensions
- - LOW: Predefined extensions
+In case you accidentally mix the 3 modes of operation from above, `wii` will apply the following priorities and apply the highest priority only:
+ - `HIGH`: Advanced mode
+ - `MEDIUM`: Custom extensions
+ - `LOW`: Predefined extensions
 
 ### Altering defaults:
 ```
 $ wii -C 0 -D 10 -F 0 -T 5 -S 0 -avd
 ```
-> -C: integer: 0 = no colors, 1 = use colors, default: 1\
-> -G: integer: 0 = group by filenames, 1 = group by extensions, default: 1\
-> -D: integer: maximum number of directories listed, default: 50\
-> -F: integer: maximum number of largest items listed per each directory, default: 50\
-> -T: integer: maximum number of largest items listed in total summary, default: 50\
-> -S: integer: 0 = don't use a spinner, 1 = use spinner, default: 1
+> `-C`: <integer>: `0` = no colors, `1` = use colors, `default: 1`\
+> `-G`: <integer>: `0` = group by filenames, `1` = group by extensions, `default: 1`\
+> `-D`: <integer>: maximum number of directories listed, `default: 50`\
+> `-F`: <integer>: maximum number of largest items listed per each directory, `default: 50`\
+> `-T`: <integer>: maximum number of largest items listed in total summary, `default: 50`\
+> `-S`: <integer>: `0` = don't use a spinner, `1` = use spinner, `default: 1`
 
 
 ## Demo:
@@ -99,10 +99,10 @@ $ wii -c "\( -type f -iname '*.tmp' -printf 'wii' \) -o \( -type f -iname '*~' -
         1 tmp
         1 kbx~
 ```
-> -G 1: group results by extensions\
-> -D 5: list max. 5 largest directories\
-> -F 1: list max. 1 largest files (by extensions) per each directory\
-> -T 3: list max. 3 largest accumulated file sizes (by extensions) in total summary
+> `-G 1`: group results by extensions\
+> `-D 5`: list max. 5 largest directories\
+> `-F 1`: list max. 1 largest files (by extensions) per each directory\
+> `-T 3`: list max. 3 largest accumulated file sizes (by extensions) in total summary
 
 
 ```
@@ -115,13 +115,13 @@ $ wii -C 0 -G 1 -D 0 -F 0 -T 5 -S 0 -avd
       333 mp3
       138 csv
 ```
-> -C 0: don't use colors for output\
-> -G 1: group results by extensions\
-> -D 0: don't list directories\
-> -F 0: don't list files (by extensions) per each directory\
-> -T 5: list max. 5 largest accumulated file sizes (by extensions) in total summary\
-> -S 0: don't use spinner\
-> -avd: list all audio, video and document files
+> `-C 0`: don't use colors for output\
+> `-G 1`: group results by extensions\
+> `-D 0`: don't list directories\
+> `-F 0`: don't list files (by extensions) per each directory\
+> `-T 5`: list max. 5 largest accumulated file sizes (by extensions) in total summary\
+> `-S 0`: don't use spinner\
+> `-avd`: list all audio, video and document files
 
 
 ```
@@ -135,7 +135,7 @@ $ wii -C 0 -G 0 -D 0 -F 0 -T 5 -S 0 -avd
   310.6MB 20200701_164008.mp4 (1)
 ```
 > Similar as per previous example, only one parameter has been changed:\
-> -G 0: group results by filenames\
+> `-G 0`: group results by filenames\
 > We may notice there are multiple files found within the structure that use the same filename.
 
 
@@ -166,10 +166,10 @@ $ wii -D 5 -F 3 -T 4 -c "-type f -mtime -7 -iname '*log*'"
   5.164MB binlog (2)
   3.238MB 016779.log (1)
 ```
-> -D 5: list max. 5 largest directories\
-> -F 3: don't list files (by extensions) per each directory\
-> -T 4: list max. 4 largest accumulated files (by filenames) in total summary\
-> -c: custom arguments for find: list all files that are at least 7 days old and contain *log* in their names\
+> `-D 5`: list max. 5 largest directories\
+> `-F 3`: don't list files (by extensions) per each directory\
+> `-T 4`: list max. 4 largest accumulated files (by filenames) in total summary\
+> `-c`: custom arguments for find: list all files that are at least 7 days old and contain *log* in their names\
 > Note '-G 0' was not set explicitly, but it will be the default for advanced mode of operation (-c), unless we set it to '-G 1'.
 
 
@@ -186,7 +186,7 @@ $ mkdir "$HOME"/utils
 $ cd "$HOME"/utils
 $ git clone https://github.com/madjoe/wii.git
 ```
-> If successful, skip the next step and continue with step 3.
+> If successful, skip the next step and continue with `step 3`.
 
 --------------
 
@@ -199,7 +199,7 @@ $ unzip wii.zip
 $ mv -i wii-master wii
 $ rm wii.zip
 ```
-> Continue with step 3.
+> Continue with `step 3`.
 
 --------------
 
@@ -215,7 +215,7 @@ $ [ "$SHELL" = *"bash" ] && echo "[ -d \"\$HOME\"/utils/wii ] && PATH=\"\$HOME/u
 
 --------------
 
-## Always be up-to-date with the newest version of `wii`
+## Be up-to-date with the newest version
 ```
 $ cd "$HOME"/utils/wii && git pull origin master
 $ [ "$SHELL" = *"zsh" ] && echo "$OK" && source "$HOME"/.zshrc
