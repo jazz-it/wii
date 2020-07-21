@@ -63,10 +63,10 @@ _wii_construct() {
          echo "Altering defaults:"
          echo "\$ wii -D 10 -F 5 -T 20 -S 0 -avd"
          echo "-C: <integer>: 0 = no colors, 1 = use colors, default: 1"
+         echo "-F: <integer>: maximum number of files listed per each directory, default: 10"
+         echo "-D: <integer>: maximum number of directories listed, default: 20"
+         echo "-T: <integer>: maximum number of files listed in total summary, default: 30"
          echo "-G: <integer>: 0 = group by filenames, 1 = group by extensions, default: 1"
-         echo "-D: <integer>: maximum number of directories listed, default: 50"
-         echo "-F: <integer>: maximum number of files listed per each directory, default: 50"
-         echo "-T: <integer>: maximum number of files listed in total summary, default: 50"
          echo "-S: <integer>: 0 = don't use spinner, 1 = use spinner, default: 1"
          exit 0
          ;;
