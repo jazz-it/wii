@@ -2,6 +2,9 @@
 # What's In It? wii v2.2.1 by jazz.com+wii@gmail.com
 # Prints a short summary of the content of any directory by listing extensions and the number of files for each type found
 
+# set -eu
+set -o pipefail
+
 
 # Allowed arguments for a regular operation
 _wii_construct() {
@@ -22,7 +25,7 @@ _wii_construct() {
 
   local OPTIND  # allowing to call getopts more than once
 
-  while getopts 'hac:C:D:F:G:S:T:defiprvx:' flag; do
+  while getopts 'hc:x:C:D:F:G:S:T:adefiprv' flag; do
     case "${flag}" in
       h) # help
          echo "What's In It? wii v2.2.1 by jazz.com+wii@gmail.com"
@@ -178,7 +181,7 @@ _wii_construct() {
   
       r) # predefined extensions: archive
          desc_element=" archive"
-         bundle_element="7z rar zip arj deb tar gz z iso"
+         bundle_element="7z rar zip arj deb tar tgz gz z iso"
          [ -z "${desc}" ] && desc="${desc_element}" || desc="${desc} /${desc_element}"
          [ -z "${bundle_p}" ] && bundle_p="${bundle_element}" || bundle_p="${bundle_p} ${bundle_element}"
          p=1
@@ -378,7 +381,7 @@ wii() {
   source "$DIR/inc/spinner.sh" 2> /dev/null
   shopt -s extglob # enable extglob whilst running the script in non-interactive shell (enabled by default for interactive one)!
 
-  while getopts 'hac:C:D:F:G:S:T:defiprvx:' flag; do
+  while getopts 'hc:x:C:D:F:G:S:T:adefiprv' flag; do
     case "${flag}" in
       C) # altering defaults for colors
          if [[ "${OPTARG}" =~ $re ]]; then
