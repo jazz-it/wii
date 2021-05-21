@@ -29,7 +29,7 @@ $ wii -x "bkp log tmp dmp py~"
 3) Advanced mode:
 $ wii -c "-type f -name '*tmp*'"
 $ wii -c "-type f -mtime -7 -size +1M -name '*.log'"
-$ wii -c "\( -type f -size +1M -iname '*.pdf' -printf 'wii' \) -o \( -type f -size +1M -iname '*.odt' -printf 'wii' \)"
+$ wii -c "( -type f -size +1M -iname '*.pdf' -printf 'wii' ) -o ( -type f -size +1M -iname '*.odt' -printf 'wii' )"
 Parameter of the -c flag will be passed to find directly with a single exception only:
 in multiple conditions as per above example, you should always use -printf 'wii'
 
