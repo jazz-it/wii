@@ -28,49 +28,8 @@ _wii_construct() {
   while getopts 'hc:x:C:D:F:G:S:T:adefiprv' flag; do
     case "${flag}" in
       h) # help
-         echo "What's In It? wii v2.2.1 by jazz.com+wii@gmail.com"
-         echo
-         echo "Usage:"
-         echo "======"
-         echo "  wii [-h]                             # help"
-         echo "      [-a|d|e|f|i|p|r|v]               # predefined extensions"
-         echo "      [-x \"<custom extension(s)>\"]     # custom extensions"
-         echo "      [-c \"<argument(s) for 'find'>\"]  # advanced mode"
-         echo "      [-C|D|F|G|S|T <integer value>]   # altering defaults"
-         echo
-         echo "Examples:"
-         echo "========="
-         echo "wii has 3 different modes of operation which should be used independently"
-         echo
-         echo "1) Predefined extensions:"
-         echo "\$ wii -av"
-         echo "-a: audio    (mp3 flac m4a mpa aif ogg wav wma dsd dsf dff)"
-         echo "-d: document (doc docx xls xlsx rtf ppt pptx pps pdf csv mdb ods odp odt txt)"
-         echo "-e: ebook    (epub mobi azw azw3 iba pdf lrs lrf lrx fb2 djvu lit rft)"
-         echo "-f: font     (ttf otf fon fnt)"
-         echo "-i: image    (jpg jpeg png gif bmp tif tiff svg ai webp)"
-         echo "-p: coding   (php py c cs cpp css htm html java js theme module inc pl sh)"
-         echo "-r: archive  (7z rar zip arj deb tar gz z iso)"
-         echo "-v: video    (mp4 mov mpg mpeg mkv m4v avi 3gp 3g2 h264 wmv vob)"
-         echo
-         echo "2) Custom extensions:"
-         echo "\$ wii -x \"bkp log tmp dmp py~\""
-         echo
-         echo "3) Advanced mode:"
-         echo "\$ wii -c \"-type f -name '*tmp*'\""
-         echo "\$ wii -c \"-type f -mtime -7 -size +1M -name '*.log'\""
-         echo "\$ wii -c \"\\( -type f -size +1M -iname '*.pdf' -printf 'wii' \\) -o \\( -type f -size +1M -iname '*.odt' -printf 'wii' \\)\""
-         echo "Parameter of the -c flag will be passed to find directly with a single exception only:"
-         echo "in multiple conditions as per above example, you should always use -printf 'wii'"
-         echo
-         echo "Altering defaults:"
-         echo "\$ wii -D 10 -F 5 -T 20 -S 0 -avd"
-         echo "-C: <integer>: 0 = no colors, 1 = use colors, default: 1"
-         echo "-F: <integer>: maximum number of files listed per each directory, default: 10"
-         echo "-D: <integer>: maximum number of directories listed, default: 20"
-         echo "-T: <integer>: maximum number of files listed in total summary, default: 30"
-         echo "-G: <integer>: 0 = group by filenames, 1 = group by extensions, default: 1"
-         echo "-S: <integer>: 0 = don't use spinner, 1 = use spinner, default: 1"
+         HELP="${DIR}/inc/help.inc"
+         [[ -f "${HELP}" ]] && cat "${HELP}"
          exit 0
          ;;
   
