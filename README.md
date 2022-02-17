@@ -41,7 +41,6 @@ $ wii -av
 ### 2) Custom extensions:
 ![wii v2.2.x custom extensions demo](https://media3.giphy.com/media/f5wR72IruPEP9ylJ5i/giphy.gif)
 ```
-$ wii -x "jpg png mp4" -M 1
 $ wii -x "bkp log tmp dmp py~"
 ```
 > In case you don't find predefined extensions fit for the job, you could 
@@ -85,6 +84,12 @@ $ wii -C 0 -D 10 -F 0 -T 5 -S 0 -avd
 
 
 ## Advanced Examples
+
+```
+$ wii -x "jpg png mp4" -M 1
+```
+> Common example when you need to lock your query to the current directory only (-maxdepth=1).
+
 
 ```
 $ wii -c "\( -type f -iname '*.tmp' -printf 'wii' \) -o \( -type f -iname '*~' -printf 'wii' \)" -G 1 -D 5 -F 1 -T 3
