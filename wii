@@ -25,7 +25,7 @@ _wii_construct() {
 
   local OPTIND  # allowing to call getopts more than once
 
-  while getopts 'hc:x:C:D:F:G:S:T:adefiprv' flag; do
+  while getopts 'hc:x:C:D:F:G:M:S:T:adefiprv' flag; do
     case "${flag}" in
       h) # help
          HELP="${DIR}/inc/help.inc"
@@ -130,6 +130,24 @@ _wii_construct() {
          p=1
          ;;
   
+      M) # maxdepth (default: 0)
+         if [[ "${OPTARG}" =~ $re ]]; then
+           maxm="${OPTARG}"
+           case $maxm in
+            1)
+                maxm="-maxdepth 1 "
+                ;;
+            0)
+                maxm=""
+                ;;
+           esac
+           
+         else
+           echo "Invalid parameter set for -M. Must be 0 (recursive) or 1 (maxdepth=1)."
+           exit 0
+         fi
+         ;;
+
       p) # predefined extensions: programming
          desc_element=" programming"
          bundle_element="php py c cs cpp css htm html java js theme module inc pl sh"
@@ -218,7 +236,7 @@ _wii_core() {
   fi
   
   
-  LC_ALL=C eval "find . ${bundle}" | gawk -v custom="${f}" -v grp="${grp}" -v desc="${desc}" -v color="${color}" -v maxd="${maxd}" -v maxf="${maxf}" -v maxt="${maxt}" -v 'RS=\0' -v OFS='\t' '
+  LC_ALL=C eval "find . ${maxm}${bundle}" | gawk -v custom="${f}" -v grp="${grp}" -v desc="${desc}" -v color="${color}" -v maxd="${maxd}" -v maxf="${maxf}" -v maxt="${maxt}" -v 'RS=\0' -v OFS='\t' '
     BEGIN {
       if (color != 0) {
         orange="\033[38;5;220m"
@@ -340,7 +358,7 @@ wii() {
   source "$DIR/inc/spinner.sh" 2> /dev/null
   shopt -s extglob # enable extglob whilst running the script in non-interactive shell (enabled by default for interactive one)!
 
-  while getopts 'hc:x:C:D:F:G:S:T:adefiprv' flag; do
+  while getopts 'hc:x:C:D:F:G:M:S:T:adefiprv' flag; do
     case "${flag}" in
       C) # altering defaults for colors
          if [[ "${OPTARG}" =~ $re ]]; then

@@ -13,7 +13,7 @@ wii [-h]                             # help
     [-a|d|e|f|i|p|r|v]               # mode 1: predefined extensions
     [-x "<custom extension(s)>"]     # mode 2: custom extensions
     [-c "<argument(s) for `find`>"]  # mode 3: advanced mode
-    [-C|D|F|G|S|T <integer value>]   # altering defaults
+    [-C|D|F|G|M|S|T <integer value>]   # altering defaults
 ```
 
 ***wii has 3 different modes of operation which should be used independently:***
@@ -41,6 +41,7 @@ $ wii -av
 ### 2) Custom extensions:
 ![wii v2.2.x custom extensions demo](https://media3.giphy.com/media/f5wR72IruPEP9ylJ5i/giphy.gif)
 ```
+$ wii -x "jpg png mp4" -M 1
 $ wii -x "bkp log tmp dmp py~"
 ```
 > In case you don't find predefined extensions fit for the job, you could 
@@ -77,6 +78,7 @@ $ wii -C 0 -D 10 -F 0 -T 5 -S 0 -avd
 > `-C`: integer: `0` = no colors, `1` = use colors, `default: 1`\
 > `-G`: integer: `0` = group by filenames, `1` = group by extensions, `default: 1`\
 > `-F`: integer: maximum number of largest items listed per each directory, `default: 10`\
+> `-M`: integer: maxdepth (0=recursively, 1=current dir only) , `default: 0`\
 > `-D`: integer: maximum number of directories listed, `default: 20`\
 > `-T`: integer: maximum number of largest items listed in total summary, `default: 30`\
 > `-S`: integer: `0` = don't use a spinner, `1` = use spinner, `default: 1`
