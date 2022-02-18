@@ -142,7 +142,7 @@ _wii_construct() {
                 ;;
            esac
          else
-           echo "Invalid parameter set for -M. Must be 0 (recursive) or 1 (maxdepth=1)."
+           echo "Invalid value set as a parameter for maxdepth. Must be an integer value, e.g. 0='recursive' or 1='current dir' only."
            exit 0
          fi
          ;;
