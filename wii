@@ -32,11 +32,11 @@ _wii_construct() {
          [[ -f "${HELP}" ]] && cat "${HELP}"
          exit 0
          ;;
-  
+
       C) continue ;; # colors: 0 = no colors; 1 = use colors (default: already set in wii())
-  
+
       S) continue ;; # using spinner (default: already set in wii())
-  
+
       G) # group results by extension: 0 = no; 1 = yes (default: 1)
          # 0 = group search results by full filenames
          if [[ "${OPTARG}" =~ $re ]]; then
@@ -46,7 +46,7 @@ _wii_construct() {
            exit 0
          fi
          ;;
-  
+
       T) # altering defaults for showing total files summary (default: 50)
          if [[ "${OPTARG}" =~ $re ]]; then
            maxt="${OPTARG}"
@@ -55,7 +55,7 @@ _wii_construct() {
            exit 0
          fi
          ;;
-  
+
       a) # predefined extensions: audio
          desc_element=" audio"
          bundle_element="mp3 flac m4a mpa aif ogg wav wma dsd dsf dff"
@@ -63,7 +63,7 @@ _wii_construct() {
          [ -z "${bundle_p}" ] && bundle_p="${bundle_element}" || bundle_p="${bundle_p} ${bundle_element}"
          p=1
          ;;
-  
+
       c)
          if [ ! -z "${OPTARG}" ]; then
            desc_element=""
@@ -79,7 +79,7 @@ _wii_construct() {
            exit 1
          fi
          ;;
-  
+
       D) # max. number of directories (default: 50)
          if [[ "${OPTARG}" =~ $re ]]; then
            maxd="${OPTARG}"
@@ -88,7 +88,7 @@ _wii_construct() {
            exit 0
          fi
          ;;
-  
+
       F) # max. number of files (default: 50)
          if [[ "${OPTARG}" =~ $re ]]; then
            maxf="${OPTARG}"
@@ -97,7 +97,7 @@ _wii_construct() {
            exit 0
          fi
          ;;
-  
+
       d) # predefined extensions: document
          desc_element=" document"
          bundle_element="doc docx xls xlsx rtf ppt pptx pps pdf csv mdb ods odp odt txt"
@@ -105,7 +105,7 @@ _wii_construct() {
          [ -z "${bundle_p}" ] && bundle_p="${bundle_element}" || bundle_p="${bundle_p} ${bundle_element}"
          p=1
          ;;
-  
+
       e) # predefined extensions: ebook
          desc_element=" ebook"
          bundle_element="epub mobi azw azw3 iba pdf lrs lrf lrx fb2 djvu lit rft"
@@ -113,7 +113,7 @@ _wii_construct() {
          [ -z "${bundle_p}" ] && bundle_p="${bundle_element}" || bundle_p="${bundle_p} ${bundle_element}"
          p=1
          ;;
-  
+
       f) # predefined extensions: font
          desc_element=" font"
          bundle_element="ttf otf fon fnt"
@@ -121,7 +121,7 @@ _wii_construct() {
          [ -z "${bundle_p}" ] && bundle_p="${bundle_element}" || bundle_p="${bundle_p} ${bundle_element}"
          p=1
          ;;
-  
+
       i) # predefined extensions: image
          desc_element=" image"
          bundle_element="jpg jpeg png gif bmp tif tiff svg ai webp"
@@ -129,19 +129,18 @@ _wii_construct() {
          [ -z "${bundle_p}" ] && bundle_p="${bundle_element}" || bundle_p="${bundle_p} ${bundle_element}"
          p=1
          ;;
-  
+
       M) # maxdepth (default: 0)
          if [[ "${OPTARG}" =~ $re ]]; then
            maxm="${OPTARG}"
            case $maxm in
-            1)
-                maxm="-maxdepth 1 "
-                ;;
             0)
                 maxm=""
                 ;;
+            *)
+                maxm="-maxdepth $maxm "
+                ;;
            esac
-           
          else
            echo "Invalid parameter set for -M. Must be 0 (recursive) or 1 (maxdepth=1)."
            exit 0
@@ -155,7 +154,7 @@ _wii_construct() {
          [ -z "${bundle_p}" ] && bundle_p="${bundle_element}" || bundle_p="${bundle_p} ${bundle_element}"
          p=1
          ;;
-  
+
       r) # predefined extensions: archive
          desc_element=" archive"
          bundle_element="7z rar zip arj deb tar tgz gz z iso"
@@ -163,7 +162,7 @@ _wii_construct() {
          [ -z "${bundle_p}" ] && bundle_p="${bundle_element}" || bundle_p="${bundle_p} ${bundle_element}"
          p=1
          ;;
-  
+
       v) # predefined extensions: video
          desc_element=" video"
          bundle_element="mp4 mov mpg mpeg mkv m4v avi 3gp 3g2 h264 wmv vob"
@@ -171,14 +170,14 @@ _wii_construct() {
          [ -z "${bundle_p}" ] && bundle_p="${bundle_element}" || bundle_p="${bundle_p} ${bundle_element}"
          p=1
          ;;
-  
+
       x) # custom extensions
          desc_element=""
          bundle_e="$(echo ${OPTARG}) | xargs"
          e=1
          ;;
-  
-      *) 
+
+      *)
          break
          ;;
     esac
@@ -226,7 +225,7 @@ _wii_core() {
       exit 0
     fi
   fi
-  
+
   # Grouping priorities
   if [ "${grp}" == 9 ];
   then
@@ -234,8 +233,8 @@ _wii_core() {
     # or else set it to 1 (grouping by extensions)
     [ "${f}" != 0 ] && grp=0 || grp=1
   fi
-  
-  
+
+
   LC_ALL=C eval "find . ${maxm}${bundle}" | gawk -v custom="${f}" -v grp="${grp}" -v desc="${desc}" -v color="${color}" -v maxd="${maxd}" -v maxf="${maxf}" -v maxt="${maxt}" -v 'RS=\0' -v OFS='\t' '
     BEGIN {
       if (color != 0) {
@@ -384,7 +383,7 @@ wii() {
   if test -t 1 && [ "${color}" == 1 ]; then
     # see if it supports colors...
     ncolors=$(tput colors)
-  
+
     if test -n "$ncolors" && test $ncolors -ge 8; then
       color=1
     else

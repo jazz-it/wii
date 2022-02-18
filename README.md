@@ -77,7 +77,7 @@ $ wii -C 0 -D 10 -F 0 -T 5 -S 0 -avd
 > `-C`: integer: `0` = no colors, `1` = use colors, `default: 1`\
 > `-G`: integer: `0` = group by filenames, `1` = group by extensions, `default: 1`\
 > `-F`: integer: maximum number of largest items listed per each directory, `default: 10`\
-> `-M`: integer: maxdepth (0=recursively, 1=current dir only) , `default: 0`\
+> `-M`: integer: maxdepth value (0=unlimited depth, 1=current dir only) , `default: 0`\
 > `-D`: integer: maximum number of directories listed, `default: 20`\
 > `-T`: integer: maximum number of largest items listed in total summary, `default: 30`\
 > `-S`: integer: `0` = don't use a spinner, `1` = use spinner, `default: 1`
