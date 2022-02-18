@@ -268,9 +268,9 @@ _wii_core() {
       {
         if (custom != 0) {
           # Check the input data format from find when in Advanced mode
-          if ($0 ~ /^[0-9]+:[0-9]+$/) { inum = $0 } else { {print "[ERROR] Find command has returned an unexpected output. Please consult the manual: https://github.com/madjoe/wii" > "/dev/stderr"} { exit 1 } }
+          if ($0 ~ /^[0-9]+:[0-9]+$/) { inum = $0 } else { {print "[ERROR] Find command has returned an unexpected output. Please consult the manual: https://github.com/jazz-it/wii" > "/dev/stderr"} { exit 1 } }
           getline du
-          if (du !~ /^[0-9]+$/) { {print "[ERROR] Find command has returned an unexpected output. Please consult the manual: https://github.com/madjoe/wii" > "/dev/stderr"} { exit 1 } }
+          if (du !~ /^[0-9]+$/) { {print "[ERROR] Find command has returned an unexpected output. Please consult the manual: https://github.com/jazz-it/wii" > "/dev/stderr"} { exit 1 } }
         } else {
           inum = $0
           getline du

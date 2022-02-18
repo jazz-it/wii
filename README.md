@@ -3,10 +3,10 @@
 
 Prints a short summary of specific content types recursively by listing corresponding disk usage per each directory. The script will print results grouped by extensions or by actual file names - ordered by size in reverse order. If you run the script without any arguments and if many directories are found, the output will be truncated to top 20 largest directories (by default), but this could be overriden easily by setting the appropriate parameter.
 
-> This project may be used as a demonstration for `du` project as a usecase for a new `--include` parameter. 
+> This project may be used as a demonstration for `du` project as a usecase for a new `--include` parameter.
 > Users would be able to measure disk usage of specific file types, which is currently not supported.
 
-## Usage: 
+## Usage:
 
 ```
 wii [-h]                             # help
@@ -43,7 +43,7 @@ $ wii -av
 ```
 $ wii -x "bkp log tmp dmp py~"
 ```
-> In case you don't find predefined extensions fit for the job, you could 
+> In case you don't find predefined extensions fit for the job, you could
 > manually enter as many keywords as you like, using a whitespace as a delimiter.\
 > Note: you should avoid using commas, or leading dots in front of each extension.
 
@@ -56,10 +56,10 @@ $ wii -c "\( -type f -iname '*.pdf' -printf 'wii' \) -o \( -type f -iname '*.doc
 ```
 > **Important**: Parameter of the `-c` flag will be passed to `find` with a few modifications:\
 > in multiple conditions as per above example, you should use `-printf 'wii'` for each multi-condition.\
-> The parameter for `-c` flag should contain almost everything that you would normally put into `<arguments>` as per 
-> `find <path> <arguments>`. However, it's crucial to know that **`wii` requires an exact format of an output 
-> from `find`**. At first, it will try to replace automatically all existing occurrences of `-printf 'something'` 
-> with the appropriate format. Then it will search for all `printf` and if it doesn't find any, `wii` will 
+> The parameter for `-c` flag should contain almost everything that you would normally put into `<arguments>` as per
+> `find <path> <arguments>`. However, it's crucial to know that **`wii` requires an exact format of an output
+> from `find`**. At first, it will try to replace automatically all existing occurrences of `-printf 'something'`
+> with the appropriate format. Then it will search for all `printf` and if it doesn't find any, `wii` will
 > append the required `-printf` to the very end of the parameter.
 
 [**find**](https://man7.org/linux/man-pages/man1/find.1.html) - check the syntax of `find` and apply the important notes from above accordingly
@@ -194,7 +194,7 @@ $ wii -D 5 -F 3 -T 4 -c "-type f -mtime -7 -iname '*log*'"
 ```
 $ mkdir "$HOME"/utils
 $ cd "$HOME"/utils
-$ git clone https://github.com/madjoe/wii.git
+$ git clone https://github.com/jazz-it/wii.git
 ```
 > If successful, skip the next step and continue with `step 3`.
 
@@ -204,7 +204,7 @@ $ git clone https://github.com/madjoe/wii.git
 ```
 $ mkdir "$HOME"/utils
 $ cd "$HOME"/utils
-$ wget https://github.com/madjoe/wii/archive/master.zip -O wii.zip
+$ wget https://github.com/jazz-it/wii/archive/master.zip -O wii.zip
 $ unzip wii.zip
 $ mv -i wii-master wii
 $ rm wii.zip
@@ -220,7 +220,7 @@ $ chmod 755 "$HOME"/utils/wii/wii "$HOME"/utils/wii/inc/spinner.sh
 $ [ "$SHELL" = *"zsh" ] && echo "[ -d \"\$HOME\"/utils/wii ] && export PATH=\"\$HOME/utils/wii:\$PATH\"" >> "$HOME"/.zshrc && echo "$OK" && source "$HOME"/.zshrc || echo "$NOZSH"
 $ [ "$SHELL" = *"bash" ] && echo "[ -d \"\$HOME\"/utils/wii ] && PATH=\"\$HOME/utils/wii:\$PATH\"" >> "$HOME"/.bashrc && echo "$OK" && source "$HOME"/.bashrc || echo "$NOBASH"
 ```
-> If one of the last two commands returned "Installation complete!" then you have 
+> If one of the last two commands returned "Installation complete!" then you have
 > successfully installed the script and you may start using it. Try: `cd && wii`
 
 --------------
