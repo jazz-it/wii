@@ -187,6 +187,10 @@ $ wii -D 5 -F 3 -T 4 -c "-type f -mtime -7 -iname '*log*'"
 
 [**gawk**](https://opensource.com/article/18/8/how-install-software-linux-command-line) - you need to have it installed prior proceeding with installation of `wii`
 
+`wii` does not use POSIX [find](http://pubs.opengroup.org/onlinepubs/9699919799/utilities/find.html), but GNU [find](http://www.gnu.org/software/findutils/manual/html_mono/find.html#Print-File-Information)
+
+How to install the GNU find on MacOS:
+https://stackoverflow.com/questions/39903571/gnu-find-on-macos
 
 ## Installation:
 
