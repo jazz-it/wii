@@ -42,9 +42,9 @@ wii [-h]                             # help
 
 ***wii has 3 different modes of operation which should be used independently:***
 We use the optional `-F2 -D3 -T3` flags just for purposes of the demo below (to make results entirely visible on screen).\
-F - max. files displayed under each dir\
-D - top X dirs with highest amount of disk usage\
-T - max. items in `total` at the bottom (summary\
+F - max. files displayed under each dir (default: 10) \
+D - top X dirs with highest amount of disk usage (default: 20) \
+T - max. items in `total` at the bottom (default: 30) \
 \
 These options override the defaults: `-F10 -D20 -T30`.\
 `F`=Files, `D`=Directories, `T`=Total files in a summary. See [Altering defaults](#altering-defaults-optional).
