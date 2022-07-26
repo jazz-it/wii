@@ -1,7 +1,9 @@
 # wii
-**What's In It?**
+**What's In It?** - Measure disk usage by filtering specific file type(s) only
 
-Prints a short summary of specific content types recursively by listing corresponding disk usage per each directory. The script will print results grouped by extensions or by actual file names - ordered by size in reverse order. If you run the script without any arguments and if many directories are found, the output will be truncated to top 20 largest directories (by default), but this could be overriden easily by setting the appropriate parameter.
+I wanted to know how many songs do I have per album and in total (recursively). I found it ridiculously complicated to get such trivial information with existing tools, so I made this wrapper script with `awk` and `find`. Now all I have to do is to type: `wii -a` and I get a full statistics of everything I need. The option `-a` automatically filters all common audio file types for me. The script could be used for several other sets of common file types as well. Hope someone will find it useful.
+
+Prints a short summary of specific content types recursively by listing corresponding disk usage per each directory. The script will print results grouped by extensions or by actual file names - ordered by size in reverse order. If you run the script without any arguments and if many directories are found, the output will be truncated to top 20 largest directories (by default), but this could be overriden easily by setting the appropriate parameters.
 
 > This project may be used as a demonstration for `du` project as a usecase for a new `--include` parameter.
 > Users would be able to measure disk usage of specific file types, which is currently not supported.
@@ -18,8 +20,12 @@ wii [-h]                             # help
 
 ***wii has 3 different modes of operation which should be used independently:***
 We use the optional `-F2 -D3 -T3` flags just for purposes of the demo below (to make results entirely visible on screen).\
-It overrides the defaults: `-F10 -D20 -T30`.\
-`F`=Files, `D`=Directories, `T`=Total files. See [Altering defaults](#altering-defaults-optional).
+F - max. files displayed under each dir\
+D - top X dirs with highest amount of disk usage\
+T - max. items in `total` at the bottom (summary\
+\
+These options override the defaults: `-F10 -D20 -T30`.\
+`F`=Files, `D`=Directories, `T`=Total files in a summary. See [Altering defaults](#altering-defaults-optional).
 
 ## Demo:
 
