@@ -3,8 +3,8 @@
 
 I wanted to know how many songs do I have per album and in total (recursively). I found it ridiculously complicated to get such trivial information with existing tools, so I made this wrapper script with `awk` and `find`. Now all I have to do is to type: `wii -a` and I get a full statistics of everything I need. The option `-a` automatically filters all common audio file types for me. The script could be used for several other sets of common file types as well. Hope someone will find it useful.
 
-## A few common usecases:
-How many multimedia files (audio, video, image) do you have within the current dir (total number AND disk usage)?\
+## Common usecases:
+How many multimedia files (audio, video, image) do you have within the current dir (total number AND disk usage)?
 ```
 $ wii -avi
 ```
