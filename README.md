@@ -4,11 +4,11 @@
 I wanted to know how many songs do I have per album and in total (recursively). I found it ridiculously complicated to get such trivial information with existing tools, so I made this wrapper script with `awk` and `find`. Now all I have to do is to type: `wii -a` and I get a full statistics of everything I need. The option `-a` automatically filters all common audio file types for me. The script could be used for several other sets of common file types as well. Hope someone will find it useful.
 
 ## Common usecases:
-How many multimedia files (audio, video, image) do you have within the current dir (total number AND disk usage)?
+How many multimedia files (audio, video, image) do you have within the current dir recursively (total number AND disk usage)?
 ```
 $ wii -avi
 ```
-You work on a project and decide to optimize all the images in your project dir automatically (the dir tree is usually stacked with dozens of different file types and those images are placed in multiple locations). Before you start altering your project images, you'd like to measure them so you could compare the efficiency of your optimization:
+You work on a project and decide to optimize all the images in your dir automatically (the dir tree is usually stacked with dozens of different file types and those images are placed in multiple locations). Before you start altering your project images, you'd like to measure them so you could compare the efficiency of your optimization after you're done:
 ```
 $ wii -i
 <rewriting your original images with optimized ones>
@@ -19,7 +19,7 @@ How many python scripts do you have in the current dir and how much space do the
 ```
 $ wii -x "py"
 ```
-How much all the `log` and `tmp` files modified within the last week occupy your disk?
+How much all the `log`, `tmp` and `~` files modified within the last week occupy your disk?
 ```
 $ wii -c "\( -type f -mtime -7 -iname '*log*' -printf 'wii' \) -o \( -type f -mtime -7 -iname '*.tmp' -printf 'wii' \) -o \( -type f -mtime -7 -iname '*~' -printf 'wii' \)"
 ```
