@@ -8,18 +8,18 @@ How many multimedia files (audio, video, image) do you have within the current d
 ```
 $ wii -avi
 ```
-You work on a project and decide to optimize all the images in your project dir automatically (the dir tree is usually stacked with dozens of different file types and those images are placed in multiple locations). Before you start altering your project images, you'd like to measure them so you could compare the efficiency of your optimization:\
+You work on a project and decide to optimize all the images in your project dir automatically (the dir tree is usually stacked with dozens of different file types and those images are placed in multiple locations). Before you start altering your project images, you'd like to measure them so you could compare the efficiency of your optimization:
 ```
 $ wii -i
 <rewriting your original images with optimized ones>
 $ wii -i
 <compare your before and after results>
 ```
-How many python scripts do you have in the current dir and how much space do they occupy?\
+How many python scripts do you have in the current dir and how much space do they occupy?
 ```
 $ wii -x "py"
 ```
-How much all the `log` and `tmp` files modified within the last week occupy your disk?\
+How much all the `log` and `tmp` files modified within the last week occupy your disk?
 ```
 $ wii -c "\( -type f -mtime -7 -iname '*log*' -printf 'wii' \) -o \( -type f -mtime -7 -iname '*.tmp' -printf 'wii' \) -o \( -type f -mtime -7 -iname '*~' -printf 'wii' \)"
 ```
