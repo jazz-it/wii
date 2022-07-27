@@ -255,6 +255,13 @@ $ [ "$SHELL" = *"bash" ] && echo "[ -d \"\$HOME\"/utils/wii ] && PATH=\"\$HOME/u
 > If one of the last two commands returned "Installation complete!" then you have
 > successfully installed the script and you may start using it. Try: `cd && wii`
 
+4. **Installation on MacOS**
+
+The -printf option is not in POSIX find. It is a feature of GNU find, e.g., on Linux.
+
+See here for additional help on how to install GNU find on MacOS:
+https://stackoverflow.com/questions/39903571/gnu-find-on-macos
+
 --------------
 
 ## Be up-to-date with the newest version
