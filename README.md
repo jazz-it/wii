@@ -257,9 +257,8 @@ $ [ "$SHELL" = *"bash" ] && echo "[ -d \"\$HOME\"/utils/wii ] && PATH=\"\$HOME/u
 
 4. **Installation on MacOS**
 
-The -printf option is not in POSIX find. It is a feature of GNU find, e.g., on Linux.
-
-See here for additional help on how to install GNU find on MacOS:
+> The `-printf` option is not in POSIX find. It is a feature of GNU find, e.g., on Linux.
+> See here for additional help on how to install GNU find on MacOS:
 https://stackoverflow.com/questions/39903571/gnu-find-on-macos
 
 --------------
