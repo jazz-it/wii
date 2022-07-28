@@ -124,7 +124,7 @@ _wii_construct() {
 
       i) # predefined extensions: image
          desc_element=" image"
-         bundle_element="jpg jpeg png gif bmp tif tiff svg ai webp"
+         bundle_element="jpg jpeg png gif bmp tif tiff svg ai webp avif"
          [ -z "${desc}" ] && desc="${desc_element}" || desc="${desc} /${desc_element}"
          [ -z "${bundle_p}" ] && bundle_p="${bundle_element}" || bundle_p="${bundle_p} ${bundle_element}"
          p=1
